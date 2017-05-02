@@ -58,11 +58,10 @@ loaders.woff = loaders.url({
   mimetype: 'application/font-woff',
 })
 
-loaders.js = options =>
+loaders.js = (options = {}) =>
   [
     {
       options,
-      parser: { amd: false },
       loader: require.resolve('babel-loader'),
     },
     options.inlineCSS !== false && require.resolve('css-literal-loader'),
@@ -259,3 +258,37 @@ plugins.html = opts =>
   )
 
 plugins.moment = () => new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/)
+
+const stats = (module.exports.stats = {
+  none: {
+    hash: false,
+    version: false,
+    timings: false,
+    assets: false,
+    entrypoints: false,
+    chunks: false,
+    chunkModules: false,
+    modules: false,
+    reasons: false,
+    depth: false,
+    usedExports: false,
+    providedExports: false,
+    children: false,
+    source: false,
+    errors: false,
+    errorDetails: false,
+    warnings: false,
+    publicPath: false,
+    performance: false,
+  },
+  minimal: a(stats.none, {
+    errors: true,
+    errorDetails: true,
+    assets: true,
+    chunks: true,
+    colors: true,
+    performance: true,
+    timings: true,
+    warnings: true,
+  }),
+})
