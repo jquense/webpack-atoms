@@ -193,6 +193,7 @@ rules.noAMD = ({ exlude, include }) => ({
  * Plugins
  */
 const plugins = (exports.plugins = {})
+const pluginName = name => camelCase(name.replace(/Plugin$/, ''))
 
 // Re-export all the built-in plugins
 ;[
@@ -231,7 +232,7 @@ const plugins = (exports.plugins = {})
   'HashedModuleIdsPlugin',
   'ModuleFilenameHelpers',
 ].forEach(plugin => {
-  plugins[camelCase(plugin)] = (...args) => new webpack[plugin](...args)
+  plugins[pluginName(plugin)] = (...args) => new webpack[plugin](...args)
 })
 ;[
   'AggressiveMergingPlugin',
@@ -244,7 +245,7 @@ const plugins = (exports.plugins = {})
   'OccurrenceOrderPlugin',
   //'UglifyJsPlugin'
 ].forEach(plugin => {
-  plugins[camelCase(plugin)] = (...args) =>
+  plugins[pluginName(plugin)] = (...args) =>
     new webpack.optimize[plugin](...args)
 })
 
