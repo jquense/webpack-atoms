@@ -51,8 +51,7 @@ loaders.postcss = ({ plugins, browsers = DEFAULT_BROWSERS } = {}) => ({
         browsers,
         flexbox: 'no-2009',
       }),
-      ...plugins,
-    ],
+    ].concat(plugins || []),
   },
 })
 
@@ -186,7 +185,7 @@ rules.scss.external = options =>
     include: VENDOR_MODULE_REGEX,
   })
 
-rules.noAMD = ({ exlude, include }) => ({
+rules.noAMD = ({ exlude, include } = {}) => ({
   parser: { amd: false },
   exlude,
   include,
