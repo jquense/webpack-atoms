@@ -70,14 +70,14 @@ loaders.woff = loaders.url({
   mimetype: 'application/font-woff',
 })
 
-loaders.js = (options = {}) =>
+loaders.js = ({ cssOptions, ...options } = {}) =>
   [
     {
       options,
       loader: require.resolve('babel-loader'),
     },
     options.inlineCSS !== false && {
-      options,
+      options: cssOptions,
       loader: require.resolve('css-literal-loader'),
     },
   ].filter(Boolean)
