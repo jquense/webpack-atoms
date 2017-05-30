@@ -75,7 +75,7 @@ loaders.js = (options = {}) => {
   const { tagName, extension, inlineCSS } = options;
   return [
     {
-      options: omit(options, 'inlineCSS', 'tagName', 'extensions'),
+      options: omit(options, 'inlineCSS', 'tagName', 'extension'),
       loader: require.resolve('babel-loader'),
     },
     inlineCSS !== false && {
