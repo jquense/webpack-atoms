@@ -3,6 +3,7 @@ const path = require('path')
 
 const autoprefixer = require('autoprefixer')
 const camelCase = require('lodash/camelCase')
+const omit = require('lodash/omit')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const flexbugs = require('postcss-flexbugs-fixes')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
@@ -70,17 +71,19 @@ loaders.woff = loaders.url({
   mimetype: 'application/font-woff',
 })
 
-loaders.js = ({ cssOptions, ...options } = {}) =>
-  [
+loaders.js = (options = {}) => {
+  const { tagName, extension, inlineCSS } = options;
+  return [
     {
-      options,
+      options: omit(options, 'inlineCSS', 'tagName', 'extensions'),
       loader: require.resolve('babel-loader'),
     },
-    options.inlineCSS !== false && {
-      options: cssOptions,
+    inlineCSS !== false && {
+      options: { tagName, extension },
       loader: require.resolve('css-literal-loader'),
     },
   ].filter(Boolean)
+}
 
 loaders.imports = options => ({
   loader: require.resolve('imports-loader'),
