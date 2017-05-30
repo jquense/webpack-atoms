@@ -1,6 +1,10 @@
 const os = require('os')
 const path = require('path')
+
+const autoprefixer = require('autoprefixer')
+const camelCase = require('lodash/camelCase')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
+const flexbugs = require('postcss-flexbugs-fixes')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const UglifyParallelPlugin = require('webpack-uglify-parallel')
 const webpack = require('webpack')
@@ -8,7 +12,7 @@ const webpack = require('webpack')
 const { env } = process
 const PRODUCTION = env.NODE_ENV === 'production'
 
-const DEFAULT_BROWSERS = ['> %1', 'last 4 versions']
+const DEFAULT_BROWSERS = ['> %1', 'last 4 versions', 'Firefox ESR']
 
 const VENDOR_MODULE_REGEX = /node_modules/
 
@@ -23,25 +27,33 @@ loaders.style = {
   loader: require.resolve('style-loader'),
 }
 
-loaders.css = (opts = {}) => {
-  const { browsers = DEFAULT_BROWSERS } = opts
-  return {
-    loader: require.resolve('css-loader'),
-    options: a(
-      {
-        minimize: PRODUCTION,
-        autoprefixer: {
-          add: true,
-          browsers,
-        },
-        camelCase: true,
-        // https://github.com/webpack-contrib/css-loader/issues/406
-        localIdentName: '[name]--[local]--[hash:base64:5]',
-      },
-      opts
-    ),
-  }
-}
+loaders.css = (opts = {}) => ({
+  loader: require.resolve('css-loader'),
+  options: a(
+    {
+      minimize: PRODUCTION,
+      camelCase: 'dashesOnly',
+      // https://github.com/webpack-contrib/css-loader/issues/406
+      localIdentName: '[name]--[local]--[hash:base64:5]',
+    },
+    opts
+  ),
+})
+
+loaders.postcss = ({ plugins, browsers = DEFAULT_BROWSERS } = {}) => ({
+  loader: require.resolve('postcss-loader'),
+  options: {
+    ident: 'postcss',
+    plugins: () => [
+      flexbugs,
+      autoprefixer({
+        browsers,
+        flexbox: 'no-2009',
+      }),
+      ...plugins,
+    ],
+  },
+})
 
 loaders.url = options => ({
   loader: require.resolve('url-loader'),
@@ -64,7 +76,10 @@ loaders.js = (options = {}) =>
       options,
       loader: require.resolve('babel-loader'),
     },
-    options.inlineCSS !== false && require.resolve('css-literal-loader'),
+    options.inlineCSS !== false && {
+      options,
+      loader: require.resolve('css-literal-loader'),
+    },
   ].filter(Boolean)
 
 loaders.imports = options => ({
@@ -115,7 +130,10 @@ rules.css = options => ({
   test: /\.css$/,
   use: ExtractTextPlugin.extract({
     fallback: loaders.style,
-    use: loaders.css(options),
+    use: [
+      loaders.css(a({}, options, { importLoaders: 1 })),
+      loaders.postcss(options),
+    ],
   }),
 })
 
@@ -175,6 +193,60 @@ rules.noAMD = ({ exlude, include }) => ({
  * Plugins
  */
 const plugins = (exports.plugins = {})
+
+// Re-export all the built-in plugins
+;[
+  'DefinePlugin',
+  'NormalModuleReplacementPlugin',
+  'ContextReplacementPlugin',
+  'IgnorePlugin',
+  'WatchIgnorePlugin',
+  'BannerPlugin',
+  'PrefetchPlugin',
+  'AutomaticPrefetchPlugin',
+  'ProvidePlugin',
+  'HotModuleReplacementPlugin',
+  'SourceMapDevToolPlugin',
+  'EvalSourceMapDevToolPlugin',
+  'EvalDevToolModulePlugin',
+  'CachePlugin',
+  'ExtendedAPIPlugin',
+  'ExternalsPlugin',
+  'JsonpTemplatePlugin',
+  'LibraryTemplatePlugin',
+  'LoaderTargetPlugin',
+  'MemoryOutputFileSystem',
+  'ProgressPlugin',
+  'SetVarMainTemplatePlugin',
+  'UmdMainTemplatePlugin',
+  'NoErrorsPlugin',
+  'NoEmitOnErrorsPlugin',
+  'NewWatchingPlugin',
+  'EnvironmentPlugin',
+  'DllPlugin',
+  'DllReferencePlugin',
+  'LoaderOptionsPlugin',
+  'NamedModulesPlugin',
+  'NamedChunksPlugin',
+  'HashedModuleIdsPlugin',
+  'ModuleFilenameHelpers',
+].forEach(plugin => {
+  plugins[camelCase(plugin)] = (...args) => new webpack[plugin](...args)
+})
+;[
+  'AggressiveMergingPlugin',
+  'AggressiveSplittingPlugin',
+  'CommonsChunkPlugin',
+  'ChunkModuleIdRangePlugin',
+  'DedupePlugin',
+  'LimitChunkCountPlugin',
+  'MinChunkSizePlugin',
+  'OccurrenceOrderPlugin',
+  //'UglifyJsPlugin'
+].forEach(plugin => {
+  plugins[camelCase(plugin)] = (...args) =>
+    new webpack.optimize[plugin](...args)
+})
 
 /**
  * https://webpack.js.org/plugins/define-plugin/

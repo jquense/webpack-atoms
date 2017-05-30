@@ -3,10 +3,11 @@
     "node": ">= 6.0.0"
   },
   "dependencies": {
+    "autoprefixer": "^7.1.1",
     "babel-core": "^6.24.1",
     "babel-loader": "^7.0.0",
     "css-literal-loader": "^0.2.0",
-    "css-loader": "^0.28.0",
+    "css-loader": "^0.28.4",
     "exports-loader": "^0.6.4",
     "extract-text-webpack-plugin": "^2.1.0",
     "file-loader": "^0.11.1",
@@ -15,8 +16,11 @@
     "imports-loader": "^0.7.1",
     "less": "^2.7.2",
     "less-loader": "^4.0.3",
-    "scss-loader": "^0.0.1",
-    "style-loader": "^0.16.1",
+    "lodash": "^4.17.4",
+    "postcss-flexbugs-fixes": "^3.0.0",
+    "postcss-loader": "^2.0.5",
+    "scss-loader": "0.0.1",
+    "style-loader": "^0.18.1",
     "url-loader": "^0.5.8",
     "webpack": "^2.4.1",
     "webpack-uglify-parallel": "^0.1.3"
