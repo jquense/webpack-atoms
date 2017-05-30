@@ -13,7 +13,7 @@ const webpack = require('webpack')
 const { env } = process
 const PRODUCTION = env.NODE_ENV === 'production'
 
-const DEFAULT_BROWSERS = ['> %1', 'last 4 versions', 'Firefox ESR']
+const DEFAULT_BROWSERS = ['> 1%', 'last 4 versions', 'Firefox ESR', 'not ie < 9']
 
 const VENDOR_MODULE_REGEX = /node_modules/
 
