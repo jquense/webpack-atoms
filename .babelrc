@@ -1,0 +1,9 @@
+{
+  "presets": [
+    ["jason", {
+      "target": "node",
+      "debug": false,
+      "targets": { "node": "4" }
+    }]
+  ]
+}
