@@ -13,19 +13,26 @@ const { env } = process
 const PRODUCTION = env.NODE_ENV === 'production'
 
 
+const makeExternalOnly = original => (options = {}) => {
+  let rule = original(options);
+  rule.include = VENDOR_MODULE_REGEX;
+  return rule
+}
 
-const makeInternal = original => (options = {}) => {
+const makeInternalOnly = original => (options = {}) => {
   let rule = original(options);
   rule.exclude = VENDOR_MODULE_REGEX;
   return rule
 }
 
-const VENDOR_MODULE_REGEX = /node_modules/
+let VENDOR_MODULE_REGEX = /node_modules/
+exports.setVendorRegex = (vendorRegex) => {
+  VENDOR_MODULE_REGEX = vendorRegex
+}
 
 let DEFAULT_BROWSERS = ['> 1%', 'last 4 versions', 'Firefox ESR', 'not ie < 9']
-
 exports.setBrowsers = (browsers) => {
-  DEFAULT_BROWSERS = [].concat(browsers);
+  DEFAULT_BROWSERS = [].concat(browsers)
 }
 
 let ident = 0;
@@ -190,8 +197,8 @@ rules.css = ({ browsers, ...options } = {}) => ({
 /**
  * CSS style loader, _excludes_ node_modules.
  */
-rules.css.internal = makeInternal(rules.css)
-
+rules.css.internal = makeInternalOnly(rules.css)
+rules.css.external = makeExternalOnly(rules.css)
 
 /**
  * PostCSS loader.
@@ -210,7 +217,8 @@ rules.postcss = (options = {}) => ({
 /**
  * PostCSS loader, _excludes_ node_modules.
  */
-rules.postcss.internal = makeInternal(rules.postcss)
+rules.postcss.internal = makeInternalOnly(rules.postcss)
+rules.postcss.external = makeExternalOnly(rules.postcss)
 
 /**
  * Less style loader.
@@ -230,7 +238,8 @@ rules.less = ({ browsers, ...options } = {}) => ({
 /**
  * Less style loader, _excludes_ node_modules.
  */
-rules.less.internal = makeInternal(rules.less)
+rules.less.internal = makeInternalOnly(rules.less)
+rules.less.external = makeExternalOnly(rules.less)
 
 /**
  * SASS style loader, excludes node_modules.
@@ -250,7 +259,8 @@ rules.sass = ({ browsers, ...options } = {}) => ({
 /**
  * SCSS style loader, _excludes_ node_modules.
  */
-rules.sass.internal = makeInternal(rules.sass)
+rules.sass.internal = makeInternalOnly(rules.sass)
+rules.sass.external = makeExternalOnly(rules.sass)
 
 rules.noAMD = ({ exlude, include } = {}) => ({
   parser: { amd: false },
@@ -258,10 +268,12 @@ rules.noAMD = ({ exlude, include } = {}) => ({
   include,
 })
 
+
+
 /**
  * Plugins
  */
-const plugins = (exports.plugins = {})
+const plugins = {};
 const pluginName = name => camelCase(name.replace(/Plugin$/, ''))
 
 // Re-export all the built-in plugins
@@ -431,3 +443,8 @@ stats.minimal = {
   timings: true,
   warnings: true,
 }
+
+
+exports.plugins = plugins;
+exports.loaders = loaders;
+exports.rules = rules;

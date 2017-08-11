@@ -20,7 +20,17 @@ var _process = process,
 
 var PRODUCTION = env.NODE_ENV === 'production';
 
-var makeInternal = function makeInternal(original) {
+var makeExternalOnly = function makeExternalOnly(original) {
+  return function () {
+    var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+
+    var rule = original(options);
+    rule.include = VENDOR_MODULE_REGEX;
+    return rule;
+  };
+};
+
+var makeInternalOnly = function makeInternalOnly(original) {
   return function () {
     var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
@@ -31,9 +41,11 @@ var makeInternal = function makeInternal(original) {
 };
 
 var VENDOR_MODULE_REGEX = /node_modules/;
+exports.setVendorRegex = function (vendorRegex) {
+  VENDOR_MODULE_REGEX = vendorRegex;
+};
 
 var DEFAULT_BROWSERS = ['> 1%', 'last 4 versions', 'Firefox ESR', 'not ie < 9'];
-
 exports.setBrowsers = function (browsers) {
   DEFAULT_BROWSERS = [].concat(browsers);
 };
@@ -242,7 +254,8 @@ rules.css = function () {
 /**
  * CSS style loader, _excludes_ node_modules.
  */
-rules.css.internal = makeInternal(rules.css);
+rules.css.internal = makeInternalOnly(rules.css);
+rules.css.external = makeExternalOnly(rules.css);
 
 /**
  * PostCSS loader.
@@ -261,7 +274,8 @@ rules.postcss = function () {
 /**
  * PostCSS loader, _excludes_ node_modules.
  */
-rules.postcss.internal = makeInternal(rules.postcss);
+rules.postcss.internal = makeInternalOnly(rules.postcss);
+rules.postcss.external = makeExternalOnly(rules.postcss);
 
 /**
  * Less style loader.
@@ -284,7 +298,8 @@ rules.less = function () {
 /**
  * Less style loader, _excludes_ node_modules.
  */
-rules.less.internal = makeInternal(rules.less);
+rules.less.internal = makeInternalOnly(rules.less);
+rules.less.external = makeExternalOnly(rules.less);
 
 /**
  * SASS style loader, excludes node_modules.
@@ -307,7 +322,8 @@ rules.sass = function () {
 /**
  * SCSS style loader, _excludes_ node_modules.
  */
-rules.sass.internal = makeInternal(rules.sass);
+rules.sass.internal = makeInternalOnly(rules.sass);
+rules.sass.external = makeExternalOnly(rules.sass);
 
 rules.noAMD = function () {
   var _ref4 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
@@ -324,7 +340,7 @@ rules.noAMD = function () {
 /**
  * Plugins
  */
-var plugins = exports.plugins = {};
+var plugins = {};
 var pluginName = function pluginName(name) {
   return camelCase(name.replace(/Plugin$/, ''));
 }
@@ -468,3 +484,7 @@ stats.minimal = _extends({}, stats.none, {
   timings: true,
   warnings: true
 });
+
+exports.plugins = plugins;
+exports.loaders = loaders;
+exports.rules = rules;
