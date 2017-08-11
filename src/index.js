@@ -167,7 +167,7 @@ rules.js.inlineCss = (options = {}) => {
  * the size threshold
  */
 rules.images = () => ({
-  use: [loaders.url],
+  use: [loaders.url()],
   test: [/\.(eot|ttf|svg)(\?.*)?$/, /\.(gif|png|mp4)$/],
 })
 
@@ -175,7 +175,7 @@ rules.images = () => ({
  * Web font loader
  */
 rules.woff = () => ({
-  use: [loaders.woff],
+  use: [loaders.woff()],
   test: /\.woff2?(\?.*)?$/,
 })
 
