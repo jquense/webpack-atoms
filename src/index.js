@@ -349,7 +349,7 @@ plugins.define = (defines = {}) =>
  * The webpack2 shim plugin for passing options to loaders. Sets
  * the minize and debug options to `true` in production (used by various loaders)
  */
-plugins.loaderOptions = options =>
+plugins.loaderOptions = (options = {}) =>
   new webpack.LoaderOptionsPlugin({
     options,
     minimize: PRODUCTION,
@@ -402,7 +402,7 @@ plugins.extractText.extract = (...args) =>
 plugins.html = opts =>
   new HtmlWebpackPlugin({
     inject: true,
-    template: path.join(__dirname, '../assets/index.html'),
+    template: path.join(__dirname, './assets/index.html'),
     ...opts,
   })
 

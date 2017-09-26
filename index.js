@@ -218,7 +218,7 @@ rules.js.inlineCss = function () {
  */
 rules.images = function () {
   return {
-    use: [loaders.url],
+    use: [loaders.url()],
     test: [/\.(eot|ttf|svg)(\?.*)?$/, /\.(gif|png|mp4)$/]
   };
 };
@@ -228,7 +228,7 @@ rules.images = function () {
  */
 rules.woff = function () {
   return {
-    use: [loaders.woff],
+    use: [loaders.woff()],
     test: /\.woff2?(\?.*)?$/
   };
 };
