@@ -55,6 +55,11 @@
     "type": "git",
     "url": "git+https://github.com/jquense/webpack-atoms.git"
   },
+  "files": [
+    "lib",
+    "src",
+    "assets"
+  ],
   "keywords": [
     "webpack",
     "webpack2",
