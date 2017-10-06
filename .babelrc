@@ -4,6 +4,7 @@
       "target": "node",
       "debug": false,
       "targets": { "node": "4" }
-    }]
+    }],
+    "flow"
   ]
 }
