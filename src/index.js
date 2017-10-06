@@ -14,22 +14,23 @@ const builtinPlugins = require('./plugins')
 const statsConfig = require('./stats')
 
 
-type Env = 'production' | 'test' | 'development'
+export type Env = 'production' | 'test' | 'development'
 
-type LoaderSpec  = string | { loader: string, options?: Object };
-type LoaderResolver<T: Object> = (options?: T) => LoaderSpec;
+export type LoaderSpec  = string | { loader: string, options?: Object };
+export type LoaderResolver<T: Object> = (options?: T) => LoaderSpec;
+
 type Condition = string | RegExp | RegExp[]
 
-type Rule = {
+export type Rule = {
   test?: Condition,
   use: LoaderSpec[],
   exclude?: Condition,
   include?: Condition,
 };
 
-type RuleFactory<T: Object> = (options?: T) => Rule
+export type RuleFactory<T: Object> = (options?: T) => Rule
 
-type ContextualRuleFactory = RuleFactory<*> & {
+export type ContextualRuleFactory = RuleFactory<*> & {
   internal: RuleFactory<*>,
   external: RuleFactory<*>,
 };
@@ -41,21 +42,22 @@ type PluginFactory = (...args?: any) => PluginInstance;
 
 type BuiltinPlugins = typeof builtinPlugins
 
-type StatKeys = $Keys<typeof statsConfig>; // eslint-disable-line
-type StatsConfig = {| [key: StatKeys]: boolean |}
+export type StatKeys = $Keys<typeof statsConfig>; // eslint-disable-line
+export type StatsConfig = {| [key: StatKeys]: boolean |}
 type StatAtoms = {|
   none: StatsConfig,
   minimal: StatsConfig,
 |}
 
-type WebpackAtomsOptions = {
-  browsers: string[],
-  vendorRegex: RegExp,
+export type WebpackAtomsOptions = {
+  babelConfig?: Object,
+  browsers?: string[],
+  vendorRegex?: RegExp,
   env: ?Env,
-  assetRelativeRoot: string
+  assetRelativeRoot?: string
 }
 
-type LoaderAtoms = {|
+export type LoaderAtoms = {
   json: LoaderResolver<*>,
   yaml: LoaderResolver<*>,
   null: LoaderResolver<*>,
@@ -77,16 +79,16 @@ type LoaderAtoms = {|
 
   imports: LoaderResolver<*>,
   exports: LoaderResolver<*>,
-|};
+};
 
 
 type JsRule = RuleFactory<*> & {
   inlineCss: RuleFactory<*>
 };
 
-type RuleAtoms = {
+export type RuleAtoms = {
   js: JsRule,
-
+  yaml: RuleFactory<*>,
   fonts: RuleFactory<*>,
   images: RuleFactory<*>,
   audioVideo: RuleFactory<*>,
@@ -98,7 +100,7 @@ type RuleAtoms = {
   sass: ContextualRuleFactory,
 };
 
-type PluginAtoms = BuiltinPlugins & {
+export type PluginAtoms = BuiltinPlugins & {
   define: PluginFactory,
   extractText: PluginFactory,
   html: PluginFactory,
@@ -107,7 +109,7 @@ type PluginAtoms = BuiltinPlugins & {
   uglify: PluginFactory,
 }
 
-type WebpackAtoms = {
+export type WebpackAtoms = {
   loaders: LoaderAtoms,
 
   rules: RuleAtoms,
@@ -124,6 +126,7 @@ let DEFAULT_BROWSERS = ['> 1%', 'last 4 versions', 'Firefox ESR', 'not ie < 9']
 
 function createAtoms(options?: WebpackAtomsOptions): WebpackAtoms {
   let {
+    babelConfig = {},
     assetRelativeRoot = '',
     env = process.env.NODE_ENV,
     vendorRegex = VENDOR_MODULE_REGEX,
@@ -182,7 +185,7 @@ function createAtoms(options?: WebpackAtomsOptions): WebpackAtoms {
       },
     }),
 
-    cssLiteral: (options) => ({
+    cssLiteral: (options = {}) => ({
       options,
       loader: require.resolve('css-literal-loader'),
     }),
@@ -235,17 +238,17 @@ function createAtoms(options?: WebpackAtomsOptions): WebpackAtoms {
       },
     }),
 
-    js: (options = {}) => ({
+    js: (options = babelConfig) => ({
       options,
       loader: require.resolve('babel-loader'),
     }),
 
-    imports: (options) => ({
+    imports: (options = {}) => ({
       options,
       loader: require.resolve('imports-loader'),
     }),
 
-    exports: (options) => ({
+    exports: (options = {}) => ({
       options,
       loader: require.resolve('exports-loader'),
     }),
@@ -264,7 +267,7 @@ function createAtoms(options?: WebpackAtomsOptions): WebpackAtoms {
   {
     let js = (options = {}) => ({
       test: /\.jsx?$/,
-      exclude: VENDOR_MODULE_REGEX,
+      exclude: vendorRegex,
       use: [loaders.js(options)]
     })
 
@@ -278,7 +281,12 @@ function createAtoms(options?: WebpackAtomsOptions): WebpackAtoms {
     rules.js = js
   }
 
-    /**
+  rules.yaml = () => ({
+    test: /\.ya?ml/,
+    use: [loaders.json(), loaders.yaml()],
+  })
+
+  /**
    * Font loader
    */
   rules.fonts = () => ({
