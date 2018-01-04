@@ -13,11 +13,10 @@ const webpack = require('webpack')
 const builtinPlugins = require('./plugins')
 const statsConfig = require('./stats')
 
-
 export type Env = 'production' | 'test' | 'development'
 
-export type LoaderSpec  = string | { loader: string, options?: Object };
-export type LoaderResolver<T: Object> = (options?: T) => LoaderSpec;
+export type LoaderSpec = string | { loader: string, options?: Object }
+export type LoaderResolver<T: Object> = (options?: T) => LoaderSpec
 
 type Condition = string | RegExp | RegExp[]
 
@@ -26,23 +25,21 @@ export type Rule = {
   use: LoaderSpec[],
   exclude?: Condition,
   include?: Condition,
-};
+}
 
 export type RuleFactory<T: Object> = (options?: T) => Rule
 
 export type ContextualRuleFactory = RuleFactory<*> & {
   internal: RuleFactory<*>,
   external: RuleFactory<*>,
-};
+}
 
-
-
-type PluginInstance = any;
-type PluginFactory = (...args?: any) => PluginInstance;
+type PluginInstance = any
+type PluginFactory = (...args?: any) => PluginInstance
 
 type BuiltinPlugins = typeof builtinPlugins
 
-export type StatKeys = $Keys<typeof statsConfig>; // eslint-disable-line
+export type StatKeys = $Keys<typeof statsConfig> // eslint-disable-line
 export type StatsConfig = {| [key: StatKeys]: boolean |}
 type StatAtoms = {|
   none: StatsConfig,
@@ -54,7 +51,7 @@ export type WebpackAtomsOptions = {
   browsers?: string[],
   vendorRegex?: RegExp,
   env: ?Env,
-  assetRelativeRoot?: string
+  assetRelativeRoot?: string,
 }
 
 export type LoaderAtoms = {
@@ -68,7 +65,7 @@ export type LoaderAtoms = {
   cssLiteral: LoaderResolver<*>,
   postcss: LoaderResolver<{
     browsers?: string[],
-    plugins?: Array<any> | (loader: any) => Array<any>,
+    plugins?: Array<any> | ((loader: any) => Array<any>),
   }>,
   less: LoaderResolver<*>,
   sass: LoaderResolver<*>,
@@ -79,12 +76,11 @@ export type LoaderAtoms = {
 
   imports: LoaderResolver<*>,
   exports: LoaderResolver<*>,
-};
-
+}
 
 type JsRule = RuleFactory<*> & {
-  inlineCss: RuleFactory<*>
-};
+  inlineCss: RuleFactory<*>,
+}
 
 export type RuleAtoms = {
   js: JsRule,
@@ -98,7 +94,7 @@ export type RuleAtoms = {
   postcss: ContextualRuleFactory,
   less: ContextualRuleFactory,
   sass: ContextualRuleFactory,
-};
+}
 
 export type PluginAtoms = BuiltinPlugins & {
   define: PluginFactory,
@@ -117,9 +113,7 @@ export type WebpackAtoms = {
   plugins: PluginAtoms,
 
   stats: StatAtoms,
-};
-
-
+}
 
 let VENDOR_MODULE_REGEX = /(node_modules|bower_components)/
 let DEFAULT_BROWSERS = ['> 1%', 'last 4 versions', 'Firefox ESR', 'not ie < 9']
@@ -131,28 +125,33 @@ function createAtoms(options?: WebpackAtomsOptions): WebpackAtoms {
     env = process.env.NODE_ENV,
     vendorRegex = VENDOR_MODULE_REGEX,
     browsers: supportedBrowsers = DEFAULT_BROWSERS,
-  } = options || {}
+  } =
+    options || {}
 
-  const makeExternalOnly = (original: RuleFactory<*>) => (options = {}): Rule => {
-    let rule = original(options);
-    rule.include = vendorRegex;
+  const makeExternalOnly = (original: RuleFactory<*>) => (
+    options = {}
+  ): Rule => {
+    let rule = original(options)
+    rule.include = vendorRegex
     return rule
   }
 
-  const makeInternalOnly = (original: RuleFactory<*>) => (options = {}): Rule => {
-    let rule = original(options);
-    rule.exclude = vendorRegex;
+  const makeInternalOnly = (original: RuleFactory<*>) => (
+    options = {}
+  ): Rule => {
+    let rule = original(options)
+    rule.exclude = vendorRegex
     return rule
   }
 
   const PRODUCTION = env === 'production'
 
-  let ident = 0;
+  let ident = 0
 
   /**
    * Loaders
    */
-  const loaders: LoaderAtoms =  {
+  const loaders: LoaderAtoms = {
     json: () => ({
       loader: require.resolve(`json-loader`),
     }),
@@ -175,7 +174,7 @@ function createAtoms(options?: WebpackAtomsOptions): WebpackAtoms {
 
     css: (options = {}) => ({
       loader: require.resolve('css-loader'),
-      options:  {
+      options: {
         minimize: PRODUCTION,
         sourceMap: !PRODUCTION,
         camelCase: 'dashesOnly',
@@ -198,7 +197,8 @@ function createAtoms(options?: WebpackAtomsOptions): WebpackAtoms {
         options: {
           ident: `postcss-${++ident}`,
           plugins: loader => {
-            plugins = (typeof plugins === `function` ? plugins(loader) : plugins) || []
+            plugins =
+              (typeof plugins === `function` ? plugins(loader) : plugins) || []
 
             return [
               flexbugs,
@@ -206,26 +206,26 @@ function createAtoms(options?: WebpackAtomsOptions): WebpackAtoms {
               ...plugins,
             ]
           },
-          ...postcssOpts
+          ...postcssOpts,
         },
       }
     },
 
     less: (options = {}) => ({
       options,
-      loader: require.resolve('less-loader')
+      loader: require.resolve('less-loader'),
     }),
 
     sass: (options = {}) => ({
       options,
-      loader: require.resolve('sass-loader')
+      loader: require.resolve('sass-loader'),
     }),
 
     file: (options = {}) => ({
       loader: require.resolve('url-loader'),
       options: {
         name: `${assetRelativeRoot}[name]-[hash].[ext]`,
-        ...options
+        ...options,
       },
     }),
 
@@ -234,7 +234,7 @@ function createAtoms(options?: WebpackAtomsOptions): WebpackAtoms {
       options: {
         limit: 10000,
         name: `${assetRelativeRoot}[name]-[hash].[ext]`,
-        ...options
+        ...options,
       },
     }),
 
@@ -254,12 +254,10 @@ function createAtoms(options?: WebpackAtomsOptions): WebpackAtoms {
     }),
   }
 
-
-
   /**
    * Rules
    */
-  const rules = {};
+  const rules = {}
 
   /**
    * Javascript loader via babel, excludes node_modules
@@ -268,7 +266,7 @@ function createAtoms(options?: WebpackAtomsOptions): WebpackAtoms {
     let js = (options = {}) => ({
       test: /\.jsx?$/,
       exclude: vendorRegex,
-      use: [loaders.js(options)]
+      use: [loaders.js(options)],
     })
 
     js.inlineCss = (options = {}) => {
@@ -322,9 +320,8 @@ function createAtoms(options?: WebpackAtomsOptions): WebpackAtoms {
     // Also exclude `html` and `json` extensions so they get processed
     // by webpacks internal loaders.
     exclude: [/\.jsx?$/, /\.html$/, /\.json$/],
-    use: [loaders.file()]
+    use: [loaders.file()],
   })
-
 
   /**
    * CSS style loader.
@@ -341,29 +338,25 @@ function createAtoms(options?: WebpackAtomsOptions): WebpackAtoms {
       }),
     })
 
-
     /**
      * CSS style loader, _excludes_ node_modules.
      */
     css.internal = makeInternalOnly(css)
     css.external = makeExternalOnly(css)
-    rules.css = css;
+    rules.css = css
   }
 
   /**
    * PostCSS loader.
    */
   {
-   const postcss = (options) => ({
-    test: /\.css$/,
-    use: ExtractTextPlugin.extract({
-      fallback: loaders.style,
-      use: [
-        loaders.css({ importLoaders: 1 }),
-        loaders.postcss(options),
-      ],
-    }),
-  });
+    const postcss = options => ({
+      test: /\.css$/,
+      use: ExtractTextPlugin.extract({
+        fallback: loaders.style,
+        use: [loaders.css({ importLoaders: 1 }), loaders.postcss(options)],
+      }),
+    })
 
     /**
      * PostCSS loader, _excludes_ node_modules.
@@ -384,7 +377,7 @@ function createAtoms(options?: WebpackAtomsOptions): WebpackAtoms {
         use: [
           loaders.css({ importLoaders: 1 }),
           loaders.postcss({ browsers }),
-          loaders.less(options)
+          loaders.less(options),
         ],
       }),
     })
@@ -418,7 +411,7 @@ function createAtoms(options?: WebpackAtomsOptions): WebpackAtoms {
      */
     sass.internal = makeInternalOnly(sass)
     sass.external = makeExternalOnly(sass)
-    rules.sass = sass;
+    rules.sass = sass
   }
 
   // rules.noAMD = ({ exlude, include } = {}) => ({
@@ -427,13 +420,10 @@ function createAtoms(options?: WebpackAtomsOptions): WebpackAtoms {
   //   include,
   // })
 
-
-
   /**
    * Plugins
    */
   const plugins = { ...builtinPlugins }
-
 
   /**
    * https://webpack.js.org/plugins/define-plugin/
@@ -464,10 +454,8 @@ function createAtoms(options?: WebpackAtomsOptions): WebpackAtoms {
    */
   plugins.uglify = ({ uglifyOptions, ...options } = {}) =>
     new UglifyPlugin({
-      parallel: {
-        cache: true,
-        workers: os.cpus().length - 1,
-      },
+      cache: true,
+      parallel: os.cpus().length - 1,
       exclude: /\.min\.js/,
       sourceMap: true,
       uglifyOptions: {
@@ -475,7 +463,7 @@ function createAtoms(options?: WebpackAtomsOptions): WebpackAtoms {
           drop_console: true,
         },
         ie8: false,
-        ...uglifyOptions
+        ...uglifyOptions,
       },
       ...options,
     })
@@ -494,8 +482,7 @@ function createAtoms(options?: WebpackAtomsOptions): WebpackAtoms {
       ...options,
     })
 
-  plugins.extractText.extract = (...args) =>
-    ExtractTextPlugin.extract(...args)
+  plugins.extractText.extract = (...args) => ExtractTextPlugin.extract(...args)
 
   /**
    * Generates an html file that includes the output bundles.
@@ -508,8 +495,7 @@ function createAtoms(options?: WebpackAtomsOptions): WebpackAtoms {
       ...opts,
     })
 
-  plugins.moment = () =>
-    new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/)
+  plugins.moment = () => new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/)
 
   const stats: StatAtoms = {
     none: statsConfig,
@@ -523,7 +509,7 @@ function createAtoms(options?: WebpackAtomsOptions): WebpackAtoms {
       performance: true,
       timings: true,
       warnings: true,
-    }
+    },
   }
 
   return {
@@ -534,9 +520,7 @@ function createAtoms(options?: WebpackAtomsOptions): WebpackAtoms {
   }
 }
 
-
 module.exports = {
   ...createAtoms(),
   createAtoms,
 }
-
