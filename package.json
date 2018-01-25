@@ -48,7 +48,7 @@
   },
   "name": "webpack-atoms",
   "description": "Small atomic bits for crafting webpack configs",
-  "version": "4.2.0",
+  "version": "5.0.0",
   "main": "lib/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
