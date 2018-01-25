@@ -1,10 +1,10 @@
 {
   "presets": [
-    ["jason", {
-      "target": "node",
-      "debug": false,
-      "targets": { "node": "4" }
+    ["@babel/env", {
+      "targets": { "node": "4" },
+      "useBuiltIns": "usage",
+      "shippedProposals": true
     }],
-    "flow"
+    "@babel/flow"
   ]
 }
