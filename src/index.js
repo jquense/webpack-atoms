@@ -456,7 +456,6 @@ function createAtoms(options?: WebpackAtomsOptions): WebpackAtoms {
     new UglifyPlugin({
       cache: true,
       parallel: os.cpus().length - 1,
-      exclude: /\.min\.js/,
       sourceMap: true,
       uglifyOptions: {
         compress: {
