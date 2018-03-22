@@ -153,16 +153,16 @@ function createAtoms(options?: WebpackAtomsOptions): WebpackAtoms {
     return rule
   }
 
-  const makeExtractLoaders = ({ extract = true }, opts) =>
+  const makeExtractLoaders = ({ extract } = {}, config) =>
     useMiniExtract
       ? [
           loaders.miniCssExtract({
-            disable: !extract,
-            fallback: opts.fallback,
+            fallback: config.fallback,
+            disable: extract == undefined ? extract : !extract,
           }),
-          ...opts.use,
+          ...config.use,
         ]
-      : ExtractTextPlugin.extract(opts)
+      : ExtractTextPlugin.extract(config)
 
   const PRODUCTION = env === 'production'
 
