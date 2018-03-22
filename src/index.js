@@ -534,10 +534,6 @@ function createAtoms(options?: WebpackAtomsOptions): WebpackAtoms {
   plugins.extractCss = options =>
     new MiniCssExtractPlugin({
       filename: '[name]-[contenthash].css',
-      allChunks: true,
-      disable: !PRODUCTION,
-      // Useful when using css modules
-      ignoreOrder: true,
       ...options,
     })
 
