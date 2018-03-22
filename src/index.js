@@ -120,22 +120,22 @@ let VENDOR_MODULE_REGEX = /(node_modules|bower_components)/
 let DEFAULT_BROWSERS = ['> 1%', 'last 4 versions', 'Firefox ESR', 'not ie < 9']
 
 function createAtoms(options?: WebpackAtomsOptions): WebpackAtoms {
-  const useMiniExtract = options.useMiniExtract || false
+  let {
+    babelConfig = {},
+    assetRelativeRoot = '',
+    env = process.env.NODE_ENV,
+    vendorRegex = VENDOR_MODULE_REGEX,
+    useMiniExtract = false,
+    browsers: supportedBrowsers = DEFAULT_BROWSERS,
+  } =
+    options || {}
+
   let MiniCssExtractPlugin
   try {
     MiniCssExtractPlugin = require('mini-css-extract-plugin') // eslint-disable-line
   } catch (err) {
     if (useMiniExtract) throw err
   }
-
-  let {
-    babelConfig = {},
-    assetRelativeRoot = '',
-    env = process.env.NODE_ENV,
-    vendorRegex = VENDOR_MODULE_REGEX,
-    browsers: supportedBrowsers = DEFAULT_BROWSERS,
-  } =
-    options || {}
 
   const makeExternalOnly = (original: RuleFactory<*>) => (
     options = {}
