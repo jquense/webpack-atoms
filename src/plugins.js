@@ -3,8 +3,17 @@
 const webpack = require('webpack')
 
 const plugin = (name, optimize) => {
-  let Plugin = (optimize ? webpack.optimize : webpack)[name]
-  return (...args?: any) => new Plugin(...args)
+  let Plugin
+  try {
+    Plugin = (optimize ? webpack.optimize : webpack)[name]
+  } catch (err) {
+    //it was removed
+    return () => {
+      throw err
+    }
+  }
+
+  return (...args: any) => new Plugin(...args)
 }
 
 const plugins = {
@@ -51,6 +60,6 @@ const plugins = {
   minChunkSize: plugin('MinChunkSizePlugin', true),
   occurrenceOrder: plugin('OccurrenceOrderPlugin', true),
   moduleConcatenation: plugin('ModuleConcatenationPlugin', true),
-};
+}
 
 module.exports = plugins
