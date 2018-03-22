@@ -1,4 +1,25 @@
 {
+  "name": "webpack-atoms",
+  "description": "Small atomic bits for crafting webpack configs",
+  "version": "5.1.1",
+  "main": "lib/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\"",
+    "build": "babel src --out-dir lib",
+    "prepublishOnly": "npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jquense/webpack-atoms.git"
+  },
+  "files": ["lib", "src", "assets"],
+  "keywords": ["webpack", "webpack2", "config", "helpers"],
+  "author": "Jason Quense <monastic.panic@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jquense/webpack-atoms/issues"
+  },
+  "homepage": "https://github.com/jquense/webpack-atoms#readme",
   "engines": {
     "node": ">= 4.0.0"
   },
@@ -29,10 +50,10 @@
     "style-loader": "^0.20.2",
     "uglifyjs-webpack-plugin": "^1.1.8",
     "url-loader": "^0.6.2",
-    "webpack": "^3.11.0",
     "yaml-loader": "^0.5.0"
   },
   "peerDependencies": {
+    "webpack": ">= 3.0.0",
     "babel-core": "^6.26.0 || ^7.0.0-0"
   },
   "devDependencies": {
@@ -45,35 +66,5 @@
     "eslint": "^4.17.0",
     "eslint-config-jason": "^4.0.0",
     "eslint-plugin-import": "^2.7.0"
-  },
-  "name": "webpack-atoms",
-  "description": "Small atomic bits for crafting webpack configs",
-  "version": "5.1.1",
-  "main": "lib/index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\"",
-    "build": "babel src --out-dir lib",
-    "prepublishOnly": "npm run build"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/jquense/webpack-atoms.git"
-  },
-  "files": [
-    "lib",
-    "src",
-    "assets"
-  ],
-  "keywords": [
-    "webpack",
-    "webpack2",
-    "config",
-    "helpers"
-  ],
-  "author": "Jason Quense <monastic.panic@gmail.com>",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/jquense/webpack-atoms/issues"
-  },
-  "homepage": "https://github.com/jquense/webpack-atoms#readme"
+  }
 }

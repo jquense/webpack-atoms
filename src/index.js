@@ -52,6 +52,7 @@ export type WebpackAtomsOptions = {
   vendorRegex?: RegExp,
   env: ?Env,
   assetRelativeRoot?: string,
+  useMiniExtract: boolean,
 }
 
 export type LoaderAtoms = {
@@ -119,6 +120,14 @@ let VENDOR_MODULE_REGEX = /(node_modules|bower_components)/
 let DEFAULT_BROWSERS = ['> 1%', 'last 4 versions', 'Firefox ESR', 'not ie < 9']
 
 function createAtoms(options?: WebpackAtomsOptions): WebpackAtoms {
+  const useMiniExtract = options.useMiniExtract || false
+  let MiniCssExtractPlugin
+  try {
+    MiniCssExtractPlugin = require('mini-css-extract-plugin') // eslint-disable-line
+  } catch (err) {
+    if (useMiniExtract) throw err
+  }
+
   let {
     babelConfig = {},
     assetRelativeRoot = '',
@@ -143,6 +152,17 @@ function createAtoms(options?: WebpackAtomsOptions): WebpackAtoms {
     rule.exclude = vendorRegex
     return rule
   }
+
+  const makeExtractLoaders = ({ extract = true }, opts) =>
+    useMiniExtract
+      ? [
+          loaders.miniCssExtract({
+            disable: !extract,
+            fallback: opts.fallback,
+          }),
+          ...opts.use,
+        ]
+      : ExtractTextPlugin.extract(opts)
 
   const PRODUCTION = env === 'production'
 
@@ -171,6 +191,14 @@ function createAtoms(options?: WebpackAtomsOptions): WebpackAtoms {
     style: () => ({
       loader: require.resolve('style-loader'),
     }),
+
+    miniCssExtract: ({ disable = !PRODUCTION, fallback, ...options }) =>
+      disable
+        ? fallback || loaders.style()
+        : {
+            loader: require.resolve('mini-extract-text-plugin/dist/loader'),
+            options,
+          },
 
     css: (options = {}) => ({
       loader: require.resolve('css-loader'),
@@ -329,7 +357,7 @@ function createAtoms(options?: WebpackAtomsOptions): WebpackAtoms {
   {
     const css = ({ browsers, ...options } = {}) => ({
       test: /\.css$/,
-      use: ExtractTextPlugin.extract({
+      use: makeExtractLoaders(options, {
         fallback: loaders.style(),
         use: [
           loaders.css({ ...options, importLoaders: 1 }),
@@ -343,6 +371,11 @@ function createAtoms(options?: WebpackAtomsOptions): WebpackAtoms {
      */
     css.internal = makeInternalOnly(css)
     css.external = makeExternalOnly(css)
+    css.modules = options => ({
+      ...css({ ...options, modules: true }),
+      test: /\.module\.css$/,
+    })
+
     rules.css = css
   }
 
@@ -350,11 +383,14 @@ function createAtoms(options?: WebpackAtomsOptions): WebpackAtoms {
    * PostCSS loader.
    */
   {
-    const postcss = options => ({
+    const postcss = ({ modules, ...opts } = {}) => ({
       test: /\.css$/,
-      use: ExtractTextPlugin.extract({
+      use: makeExtractLoaders(opts, {
         fallback: loaders.style,
-        use: [loaders.css({ importLoaders: 1 }), loaders.postcss(options)],
+        use: [
+          loaders.css({ importLoaders: 1, modules }),
+          loaders.postcss(opts),
+        ],
       }),
     })
 
@@ -363,6 +399,10 @@ function createAtoms(options?: WebpackAtomsOptions): WebpackAtoms {
      */
     postcss.internal = makeInternalOnly(postcss)
     postcss.external = makeExternalOnly(postcss)
+    postcss.modules = options => ({
+      ...postcss({ ...options, modules: true }),
+      test: /\.module\.css$/,
+    })
     rules.postcss = postcss
   }
 
@@ -370,12 +410,12 @@ function createAtoms(options?: WebpackAtomsOptions): WebpackAtoms {
    * Less style loader.
    */
   {
-    const less = ({ browsers, ...options } = {}) => ({
+    const less = ({ modules, browsers, ...options } = {}) => ({
       test: /\.less$/,
-      use: ExtractTextPlugin.extract({
+      use: makeExtractLoaders(options, {
         fallback: loaders.style(),
         use: [
-          loaders.css({ importLoaders: 1 }),
+          loaders.css({ importLoaders: 1, modules }),
           loaders.postcss({ browsers }),
           loaders.less(options),
         ],
@@ -387,6 +427,10 @@ function createAtoms(options?: WebpackAtomsOptions): WebpackAtoms {
      */
     less.internal = makeInternalOnly(less)
     less.external = makeExternalOnly(less)
+    less.modules = options => ({
+      ...less({ ...options, modules: true }),
+      test: /\.module\.less$/,
+    })
     rules.less = less
   }
 
@@ -394,12 +438,12 @@ function createAtoms(options?: WebpackAtomsOptions): WebpackAtoms {
    * SASS style loader, excludes node_modules.
    */
   {
-    const sass = ({ browsers, ...options } = {}) => ({
+    const sass = ({ browsers, modules, ...options } = {}) => ({
       test: /\.s(a|c)ss$/,
-      use: ExtractTextPlugin.extract({
+      use: makeExtractLoaders(options, {
         fallback: loaders.style(),
         use: [
-          loaders.css({ importLoaders: 1 }),
+          loaders.css({ importLoaders: 1, modules }),
           loaders.postcss({ browsers }),
           loaders.sass(options),
         ],
@@ -411,6 +455,10 @@ function createAtoms(options?: WebpackAtomsOptions): WebpackAtoms {
      */
     sass.internal = makeInternalOnly(sass)
     sass.external = makeExternalOnly(sass)
+    sass.modules = options => ({
+      ...sass({ ...options, modules: true }),
+      test: /\.module\.s(a|c)ss$/,
+    })
     rules.sass = sass
   }
 
@@ -482,6 +530,16 @@ function createAtoms(options?: WebpackAtomsOptions): WebpackAtoms {
     })
 
   plugins.extractText.extract = (...args) => ExtractTextPlugin.extract(...args)
+
+  plugins.extractCss = options =>
+    new MiniCssExtractPlugin({
+      filename: '[name]-[contenthash].css',
+      allChunks: true,
+      disable: !PRODUCTION,
+      // Useful when using css modules
+      ignoreOrder: true,
+      ...options,
+    })
 
   /**
    * Generates an html file that includes the output bundles.
