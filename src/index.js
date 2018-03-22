@@ -196,7 +196,7 @@ function createAtoms(options?: WebpackAtomsOptions): WebpackAtoms {
       disable
         ? fallback || loaders.style()
         : {
-            loader: require.resolve('mini-extract-text-plugin/dist/loader'),
+            loader: MiniCssExtractPlugin && MiniCssExtractPlugin.loader,
             options,
           },
 
