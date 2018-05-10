@@ -1,13 +1,12 @@
 // @flow
 
-const os = require('os')
 const path = require('path')
 
 const autoprefixer = require('autoprefixer')
-const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const flexbugs = require('postcss-flexbugs-fixes')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const UglifyPlugin = require('uglifyjs-webpack-plugin')
+const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const webpack = require('webpack')
 
 const builtinPlugins = require('./plugins')
@@ -116,8 +115,8 @@ export type WebpackAtoms = {
   stats: StatAtoms,
 }
 
-let VENDOR_MODULE_REGEX = /(node_modules|bower_components)/
-let DEFAULT_BROWSERS = ['> 1%', 'last 4 versions', 'Firefox ESR', 'not ie < 9']
+let VENDOR_MODULE_REGEX = /node_modules/
+let DEFAULT_BROWSERS = ['> 1%', 'Firefox ESR', 'not ie < 9']
 
 function createAtoms(options?: WebpackAtomsOptions): WebpackAtoms {
   let {
@@ -125,17 +124,10 @@ function createAtoms(options?: WebpackAtomsOptions): WebpackAtoms {
     assetRelativeRoot = '',
     env = process.env.NODE_ENV,
     vendorRegex = VENDOR_MODULE_REGEX,
-    useMiniExtract = false,
+    disableMiniExtractInDev = true,
     browsers: supportedBrowsers = DEFAULT_BROWSERS,
   } =
     options || {}
-
-  let MiniCssExtractPlugin
-  try {
-    MiniCssExtractPlugin = require('mini-css-extract-plugin') // eslint-disable-line
-  } catch (err) {
-    if (useMiniExtract) throw err
-  }
 
   const makeExternalOnly = (original: RuleFactory<*>) => (
     options = {}
@@ -153,16 +145,13 @@ function createAtoms(options?: WebpackAtomsOptions): WebpackAtoms {
     return rule
   }
 
-  const makeExtractLoaders = ({ extract } = {}, config) =>
-    useMiniExtract
-      ? [
-          loaders.miniCssExtract({
-            fallback: config.fallback,
-            disable: extract == undefined ? extract : !extract,
-          }),
-          ...config.use,
-        ]
-      : ExtractTextPlugin.extract(config)
+  const makeExtractLoaders = ({ extract } = {}, config) => [
+    loaders.miniCssExtract({
+      fallback: config.fallback,
+      disable: extract == undefined ? extract : !extract,
+    }),
+    ...config.use,
+  ]
 
   const PRODUCTION = env === 'production'
 
@@ -173,30 +162,34 @@ function createAtoms(options?: WebpackAtomsOptions): WebpackAtoms {
    */
   const loaders: LoaderAtoms = {
     json: () => ({
-      loader: require.resolve(`json-loader`),
+      loader: require.resolve('json-loader'),
     }),
 
     yaml: () => ({
-      loader: require.resolve(`yaml-loader`),
+      loader: require.resolve('yaml-loader'),
     }),
 
     null: () => ({
-      loader: require.resolve(`null-loader`),
+      loader: require.resolve('null-loader'),
     }),
 
     raw: () => ({
-      loader: require.resolve(`raw-loader`),
+      loader: require.resolve('raw-loader'),
     }),
 
     style: () => ({
       loader: require.resolve('style-loader'),
     }),
 
-    miniCssExtract: ({ disable = !PRODUCTION, fallback, ...options }) =>
+    miniCssExtract: ({
+      disable = !PRODUCTION && disableMiniExtractInDev,
+      fallback,
+      ...options
+    }) =>
       disable
         ? fallback || loaders.style()
         : {
-            loader: MiniCssExtractPlugin && MiniCssExtractPlugin.loader,
+            loader: MiniCssExtractPlugin.loader,
             options,
           },
 
@@ -462,12 +455,6 @@ function createAtoms(options?: WebpackAtomsOptions): WebpackAtoms {
     rules.sass = sass
   }
 
-  // rules.noAMD = ({ exlude, include } = {}) => ({
-  //   parser: { amd: false },
-  //   exlude,
-  //   include,
-  // })
-
   /**
    * Plugins
    */
@@ -503,7 +490,7 @@ function createAtoms(options?: WebpackAtomsOptions): WebpackAtoms {
   plugins.uglify = ({ uglifyOptions, ...options } = {}) =>
     new UglifyPlugin({
       cache: true,
-      parallel: os.cpus().length - 1,
+      parallel: true,
       sourceMap: true,
       uglifyOptions: {
         compress: {
@@ -519,18 +506,6 @@ function createAtoms(options?: WebpackAtomsOptions): WebpackAtoms {
    * Extracts css requires into a single file;
    * includes some reasonable defaults
    */
-  plugins.extractText = options =>
-    new ExtractTextPlugin({
-      filename: '[name]-[contenthash].css',
-      allChunks: true,
-      disable: !PRODUCTION,
-      // Useful when using css modules
-      ignoreOrder: true,
-      ...options,
-    })
-
-  plugins.extractText.extract = (...args) => ExtractTextPlugin.extract(...args)
-
   plugins.extractCss = options =>
     new MiniCssExtractPlugin({
       filename: '[name]-[contenthash].css',
