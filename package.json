@@ -1,7 +1,7 @@
 {
   "name": "webpack-atoms",
   "description": "Small atomic bits for crafting webpack configs",
-  "version": "6.0.6",
+  "version": "7.0.0",
   "main": "lib/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\"",
@@ -12,8 +12,17 @@
     "type": "git",
     "url": "git+https://github.com/jquense/webpack-atoms.git"
   },
-  "files": ["lib", "src", "assets"],
-  "keywords": ["webpack", "webpack2", "config", "helpers"],
+  "files": [
+    "lib",
+    "src",
+    "assets"
+  ],
+  "keywords": [
+    "webpack",
+    "webpack2",
+    "config",
+    "helpers"
+  ],
   "author": "Jason Quense <monastic.panic@gmail.com>",
   "license": "MIT",
   "bugs": {
