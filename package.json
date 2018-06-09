@@ -35,7 +35,7 @@
   "optionalDependencies": {
     "less": "^2.7.2",
     "less-loader": "^4.1.0",
-    "node-sass": "^4.5.3",
+    "node-sass": "^4.9.0",
     "sass-loader": "^6.0.7"
   },
   "dependencies": {
