@@ -243,7 +243,7 @@ function createAtoms(options?: WebpackAtomsOptions): WebpackAtoms {
     }),
 
     file: (options = {}) => ({
-      loader: require.resolve('url-loader'),
+      loader: require.resolve('file-loader'),
       options: {
         name: `${assetRelativeRoot}[name]-[hash].[ext]`,
         ...options,
