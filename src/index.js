@@ -5,8 +5,9 @@ const path = require('path')
 const autoprefixer = require('autoprefixer')
 const flexbugs = require('postcss-flexbugs-fixes')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
-const UglifyPlugin = require('uglifyjs-webpack-plugin')
+const TerserPlugin = require(`terser-webpack-plugin`)
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
+const OptimizeCssAssetsPlugin = require(`optimize-css-assets-webpack-plugin`)
 const webpack = require('webpack')
 
 const builtinPlugins = require('./plugins')
@@ -102,7 +103,8 @@ export type PluginAtoms = BuiltinPlugins & {
   html: PluginFactory,
   loaderOptions: PluginFactory,
   moment: PluginFactory,
-  uglify: PluginFactory,
+  minifyJs: PluginFactory,
+  minifyCss: PluginFactory,
 }
 
 export type WebpackAtoms = {
@@ -126,8 +128,7 @@ function createAtoms(options?: WebpackAtomsOptions): WebpackAtoms {
     vendorRegex = VENDOR_MODULE_REGEX,
     disableMiniExtractInDev = true,
     browsers: supportedBrowsers = DEFAULT_BROWSERS,
-  } =
-    options || {}
+  } = options || {}
 
   const makeExternalOnly = (original: RuleFactory<*>) => (
     options = {}
@@ -487,17 +488,20 @@ function createAtoms(options?: WebpackAtomsOptions): WebpackAtoms {
    * Minify javascript code without regard for IE8. Attempts
    * to parallelize the work to save time. Generally only add in Production
    */
-  plugins.uglify = ({ uglifyOptions, ...options } = {}) =>
-    new UglifyPlugin({
+  /**
+   * Minify javascript code without regard for IE8. Attempts
+   * to parallelize the work to save time. Generally only add in Production
+   */
+  plugins.minifyJs = ({ terserOptions, ...options } = {}) =>
+    new TerserPlugin({
       cache: true,
       parallel: true,
+      exclude: /\.min\.js/,
       sourceMap: true,
-      uglifyOptions: {
-        compress: {
-          drop_console: true,
-        },
+      terserOptions: {
+        ecma: 8,
         ie8: false,
-        ...uglifyOptions,
+        ...terserOptions,
       },
       ...options,
     })
@@ -511,6 +515,8 @@ function createAtoms(options?: WebpackAtomsOptions): WebpackAtoms {
       filename: '[name]-[contenthash].css',
       ...options,
     })
+
+  plugins.minifyCss = (options = {}) => new OptimizeCssAssetsPlugin(options)
 
   /**
    * Generates an html file that includes the output bundles.
