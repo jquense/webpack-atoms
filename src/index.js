@@ -208,7 +208,7 @@ function createAtoms(options?: WebpackAtomsOptions): WebpackAtoms {
 
     cssLiteral: (options = {}) => ({
       options,
-      loader: require.resolve('css-literal-loader'),
+      loader: require.resolve('astroturf'),
     }),
 
     postcss: (options = {}) => {
