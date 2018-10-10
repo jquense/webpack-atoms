@@ -409,7 +409,7 @@ function createAtoms(options?: WebpackAtomsOptions): WebpackAtoms {
       use: makeExtractLoaders(options, {
         fallback: loaders.style(),
         use: [
-          loaders.css({ importLoaders: 1, modules }),
+          loaders.css({ importLoaders: 2, modules }),
           loaders.postcss({ browsers }),
           loaders.less(options),
         ],
@@ -437,7 +437,7 @@ function createAtoms(options?: WebpackAtomsOptions): WebpackAtoms {
       use: makeExtractLoaders(options, {
         fallback: loaders.style(),
         use: [
-          loaders.css({ importLoaders: 1, modules }),
+          loaders.css({ importLoaders: 2, modules }),
           loaders.postcss({ browsers }),
           loaders.sass(options),
         ],
