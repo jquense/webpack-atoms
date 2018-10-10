@@ -199,7 +199,7 @@ function createAtoms(options?: WebpackAtomsOptions): WebpackAtoms {
       options: {
         minimize: PRODUCTION,
         sourceMap: !PRODUCTION,
-        camelCase: 'dashesOnly',
+        camelCase: 'dashes',
         // https://github.com/webpack-contrib/css-loader/issues/406
         localIdentName: '[name]--[local]--[hash:base64:5]',
         ...options,
