@@ -70,6 +70,7 @@ export type LoaderAtoms = {
   }>,
   less: LoaderResolver<*>,
   sass: LoaderResolver<*>,
+  fastSass: LoaderResolver<*>,
 
   file: LoaderResolver<*>,
   url: LoaderResolver<*>,
@@ -95,6 +96,7 @@ export type RuleAtoms = {
   postcss: ContextualRuleFactory,
   less: ContextualRuleFactory,
   sass: ContextualRuleFactory,
+  fastSass: ContextualRuleFactory,
 }
 
 export type PluginAtoms = BuiltinPlugins & {
@@ -241,6 +243,11 @@ function createAtoms(options?: WebpackAtomsOptions): WebpackAtoms {
     sass: (options = {}) => ({
       options,
       loader: require.resolve('sass-loader'),
+    }),
+
+    fastSass: (options = {}) => ({
+      options,
+      loader: require.resolve('@4c/fast-sass-loader'),
     }),
 
     file: (options = {}) => ({
@@ -454,6 +461,34 @@ function createAtoms(options?: WebpackAtomsOptions): WebpackAtoms {
       test: /\.module\.s(a|c)ss$/,
     })
     rules.sass = sass
+  }
+
+  /**
+   * fast SASS style loader, excludes node_modules.
+   */
+  {
+    const fastSass = ({ browsers, modules, ...options } = {}) => ({
+      test: /\.s(a|c)ss$/,
+      use: makeExtractLoaders(options, {
+        fallback: loaders.style(),
+        use: [
+          loaders.css({ importLoaders: 2, modules }),
+          loaders.postcss({ browsers }),
+          loaders.fastSass(options),
+        ],
+      }),
+    })
+
+    /**
+     * SCSS style loader, _excludes_ node_modules.
+     */
+    fastSass.internal = makeInternalOnly(fastSass)
+    fastSass.external = makeExternalOnly(fastSass)
+    fastSass.modules = options => ({
+      ...fastSass({ ...options, modules: true }),
+      test: /\.module\.s(a|c)ss$/,
+    })
+    rules.fastSass = fastSass
   }
 
   /**
