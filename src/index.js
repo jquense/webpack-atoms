@@ -123,11 +123,6 @@ export type WebpackAtoms = {
 let VENDOR_MODULE_REGEX = /node_modules/
 let DEFAULT_BROWSERS = ['> 1%', 'Firefox ESR', 'not ie < 9']
 
-function getBrowsers({ browsers, ignoreBrowserslistConfig }) {
-  if (ignoreBrowserslistConfig || !loadConfig({ path: path.resolve('.') }))
-    return browsers || DEFAULT_BROWSERS
-}
-
 function createAtoms(options?: WebpackAtomsOptions): WebpackAtoms {
   let {
     babelConfig = {},
