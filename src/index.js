@@ -3,11 +3,14 @@
 const path = require('path')
 
 const autoprefixer = require('autoprefixer')
+const CopyWebpackPlugin = require('copy-webpack-plugin')
 const flexbugs = require('postcss-flexbugs-fixes')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const TerserPlugin = require(`terser-webpack-plugin`)
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const OptimizeCssAssetsPlugin = require(`optimize-css-assets-webpack-plugin`)
+const { UnusedFilesWebpackPlugin } = require('unused-files-webpack-plugin')
+const FaviconsWebpackPlugin = require('favicons-webpack-plugin')
 const webpack = require('webpack')
 const { loadConfig } = require('browserslist')
 
@@ -108,6 +111,9 @@ export type PluginAtoms = BuiltinPlugins & {
   moment: PluginFactory,
   minifyJs: PluginFactory,
   minifyCss: PluginFactory,
+  unusedFiles: PluginFactory,
+  favicons: PluginFactory,
+  copy: PluginFactory,
 }
 
 export type WebpackAtoms = {
@@ -562,6 +568,10 @@ function createAtoms(options?: WebpackAtomsOptions): WebpackAtoms {
     })
 
   plugins.moment = () => new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/)
+
+  plugins.copy = (...args) => new CopyWebpackPlugin(...args)
+  plugins.unusedFiles = (...args) => new UnusedFilesWebpackPlugin(...args)
+  plugins.favicons = (...args) => new FaviconsWebpackPlugin(...args)
 
   const stats: StatAtoms = {
     none: statsConfig,
