@@ -68,6 +68,7 @@ export type LoaderAtoms = {
   style: LoaderResolver<*>,
   css: LoaderResolver<*>,
   cssLiteral: LoaderResolver<*>,
+  astroturf: LoaderResolver<*>,
   postcss: LoaderResolver<{
     browsers?: string[],
     plugins?: Array<any> | ((loader: any) => Array<any>),
@@ -101,6 +102,8 @@ export type RuleAtoms = {
   less: ContextualRuleFactory,
   sass: ContextualRuleFactory,
   fastSass: ContextualRuleFactory,
+
+  astroturf: ContextualRuleFactory,
 }
 
 export type PluginAtoms = BuiltinPlugins & {
@@ -221,6 +224,10 @@ function createAtoms(options?: WebpackAtomsOptions): WebpackAtoms {
 
     cssLiteral: (options = {}) => ({
       options,
+      loader: require.resolve('astroturf/loader'),
+    }),
+    astroturf: options => ({
+      options: { extension: '.module.css', ...options },
       loader: require.resolve('astroturf/loader'),
     }),
 
@@ -363,6 +370,20 @@ function createAtoms(options?: WebpackAtomsOptions): WebpackAtoms {
     use: [loaders.file()],
   })
 
+  /**
+   * Astroturf loader.
+   */
+  {
+    let astroturf = (options = {}) => ({
+      test: /\.(j|t)sx?$/,
+      use: [loaders.astroturf(options)],
+    })
+
+    astroturf.sass = opts => astroturf({ extension: 'module.scss', ...opts })
+    astroturf.less = opts => astroturf({ extension: 'module.scss', ...opts })
+
+    rules.astroturf = astroturf
+  }
   /**
    * CSS style loader.
    */
