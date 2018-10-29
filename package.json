@@ -6,6 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\"",
     "build": "babel src --out-dir lib",
+    "release": "rollout",
     "prepublishOnly": "npm run build"
   },
   "repository": {
@@ -42,6 +43,7 @@
     "astroturf": ">=0.7.1",
     "autoprefixer": "^9.1.5",
     "babel-loader": "^8.0.2",
+    "browserslist": "^4.3.4",
     "css-loader": "^1.0.0",
     "exports-loader": "^0.7.0",
     "file-loader": "^2.0.0",
@@ -66,7 +68,11 @@
     "@babel/core": "^7.0.0",
     "webpack": ">= 4.0.0"
   },
+  "release": {
+    "conventionalCommits": true
+  },
   "devDependencies": {
+    "@4c/rollout": "^1.2.0",
     "@babel/cli": "^7.1.0",
     "@babel/core": "^7.1.0",
     "@babel/preset-env": "^7.1.0",

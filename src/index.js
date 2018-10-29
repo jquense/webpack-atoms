@@ -9,6 +9,7 @@ const TerserPlugin = require(`terser-webpack-plugin`)
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const OptimizeCssAssetsPlugin = require(`optimize-css-assets-webpack-plugin`)
 const webpack = require('webpack')
+const { loadConfig } = require('browserslist')
 
 const builtinPlugins = require('./plugins')
 const statsConfig = require('./stats')
@@ -122,6 +123,11 @@ export type WebpackAtoms = {
 let VENDOR_MODULE_REGEX = /node_modules/
 let DEFAULT_BROWSERS = ['> 1%', 'Firefox ESR', 'not ie < 9']
 
+function getBrowsers({ browsers, ignoreBrowserslistConfig }) {
+  if (ignoreBrowserslistConfig || !loadConfig({ path: path.resolve('.') }))
+    return browsers || DEFAULT_BROWSERS
+}
+
 function createAtoms(options?: WebpackAtomsOptions): WebpackAtoms {
   let {
     babelConfig = {},
@@ -129,8 +135,12 @@ function createAtoms(options?: WebpackAtomsOptions): WebpackAtoms {
     env = process.env.NODE_ENV,
     vendorRegex = VENDOR_MODULE_REGEX,
     disableMiniExtractInDev = true,
-    browsers: supportedBrowsers = DEFAULT_BROWSERS,
+    ignoreBrowserslistConfig = false,
+    browsers: supportedBrowsers,
   } = options || {}
+
+  if (ignoreBrowserslistConfig || !loadConfig({ path: path.resolve('.') }))
+    supportedBrowsers = supportedBrowsers || DEFAULT_BROWSERS
 
   const makeExternalOnly = (original: RuleFactory<*>) => (
     options = {}
@@ -367,17 +377,14 @@ function createAtoms(options?: WebpackAtomsOptions): WebpackAtoms {
       }),
     })
 
-    /**
-     * CSS style loader, _excludes_ node_modules.
-     */
-    css.internal = makeInternalOnly(css)
-    css.external = makeExternalOnly(css)
-    css.modules = options => ({
-      ...css({ ...options, modules: true }),
-      test: /\.module\.css$/,
+    rules.css = opts => ({
+      oneOf: [
+        { ...css({ ...options, modules: true }), test: /\.module\.css$/ },
+        css(opts),
+      ],
     })
-
-    rules.css = css
+    rules.css.internal = makeInternalOnly(rules.css)
+    rules.css.external = makeExternalOnly(rules.css)
   }
 
   /**
@@ -395,16 +402,14 @@ function createAtoms(options?: WebpackAtomsOptions): WebpackAtoms {
       }),
     })
 
-    /**
-     * PostCSS loader, _excludes_ node_modules.
-     */
-    postcss.internal = makeInternalOnly(postcss)
-    postcss.external = makeExternalOnly(postcss)
-    postcss.modules = options => ({
-      ...postcss({ ...options, modules: true }),
-      test: /\.module\.css$/,
+    rules.postcss = opts => ({
+      oneOf: [
+        { ...postcss({ ...options, modules: true }), test: /\.module\.css$/ },
+        postcss(opts),
+      ],
     })
-    rules.postcss = postcss
+    rules.postcss.internal = makeInternalOnly(rules.postcss)
+    rules.postcss.external = makeExternalOnly(rules.postcss)
   }
 
   /**
@@ -423,16 +428,14 @@ function createAtoms(options?: WebpackAtomsOptions): WebpackAtoms {
       }),
     })
 
-    /**
-     * Less style loader, _excludes_ node_modules.
-     */
-    less.internal = makeInternalOnly(less)
-    less.external = makeExternalOnly(less)
-    less.modules = options => ({
-      ...less({ ...options, modules: true }),
-      test: /\.module\.less$/,
+    rules.less = opts => ({
+      oneOf: [
+        { ...less({ ...options, modules: true }), test: /\.module\.less$/ },
+        less(opts),
+      ],
     })
-    rules.less = less
+    rules.less.internal = makeInternalOnly(rules.less)
+    rules.less.external = makeExternalOnly(rules.less)
   }
 
   /**
@@ -451,16 +454,14 @@ function createAtoms(options?: WebpackAtomsOptions): WebpackAtoms {
       }),
     })
 
-    /**
-     * SCSS style loader, _excludes_ node_modules.
-     */
-    sass.internal = makeInternalOnly(sass)
-    sass.external = makeExternalOnly(sass)
-    sass.modules = options => ({
-      ...sass({ ...options, modules: true }),
-      test: /\.module\.s(a|c)ss$/,
+    rules.sass = opts => ({
+      oneOf: [
+        { ...sass({ ...options, modules: true }), test: /\.module\.s(a|c)ss$/ },
+        sass(opts),
+      ],
     })
-    rules.sass = sass
+    rules.sass.internal = makeInternalOnly(rules.sass)
+    rules.sass.external = makeExternalOnly(rules.sass)
   }
 
   /**
@@ -479,16 +480,17 @@ function createAtoms(options?: WebpackAtomsOptions): WebpackAtoms {
       }),
     })
 
-    /**
-     * SCSS style loader, _excludes_ node_modules.
-     */
-    fastSass.internal = makeInternalOnly(fastSass)
-    fastSass.external = makeExternalOnly(fastSass)
-    fastSass.modules = options => ({
-      ...fastSass({ ...options, modules: true }),
-      test: /\.module\.s(a|c)ss$/,
+    rules.fastSass = opts => ({
+      oneOf: [
+        {
+          ...fastSass({ ...options, modules: true }),
+          test: /\.module\.s(a|c)ss$/,
+        },
+        fastSass(opts),
+      ],
     })
-    rules.fastSass = fastSass
+    rules.fastSass.internal = makeInternalOnly(rules.fastSass)
+    rules.fastSass.external = makeExternalOnly(rules.fastSass)
   }
 
   /**
@@ -586,6 +588,10 @@ function createAtoms(options?: WebpackAtomsOptions): WebpackAtoms {
     rules: (rules: RuleAtoms),
     plugins: (plugins: PluginAtoms),
     stats,
+
+    makeExternalOnly,
+    makeInternalOnly,
+    makeExtractLoaders,
   }
 }
 
