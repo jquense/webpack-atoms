@@ -1,3 +1,15 @@
+# [9.1.0](https://github.com/jquense/webpack-atoms/compare/v9.0.0...v9.1.0) (2018-10-29)
+
+
+### Features
+
+* add astroturf loader and rule ([43db27c](https://github.com/jquense/webpack-atoms/commit/43db27c))
+* add copy, unusedFiles, favicon plugins ([9c3ebe3](https://github.com/jquense/webpack-atoms/commit/9c3ebe3))
+
+
+
+
+
 # [9.0.0](https://github.com/jquense/webpack-atoms/compare/v8.3.0...v9.0.0) (2018-10-29)
 
 
