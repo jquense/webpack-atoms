@@ -1,3 +1,19 @@
+# [10.0.0](https://github.com/jquense/webpack-atoms/compare/v9.1.0...v10.0.0) (2019-02-15)
+
+
+### chore
+
+* bump deps ([140b203](https://github.com/jquense/webpack-atoms/commit/140b203))
+
+
+### BREAKING CHANGES
+
+* various dep major upgrades
+
+
+
+
+
 # [9.1.0](https://github.com/jquense/webpack-atoms/compare/v9.0.0...v9.1.0) (2018-10-29)
 
 
