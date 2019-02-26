@@ -1,3 +1,14 @@
+## [10.0.2](https://github.com/jquense/webpack-atoms/compare/v10.0.1...v10.0.2) (2019-02-26)
+
+
+### Bug Fixes
+
+* css-loader options not passed ([bc6afda](https://github.com/jquense/webpack-atoms/commit/bc6afda))
+
+
+
+
+
 ## [10.0.1](https://github.com/jquense/webpack-atoms/compare/v10.0.0...v10.0.1) (2019-02-26)
 
 
