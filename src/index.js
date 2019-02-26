@@ -400,7 +400,7 @@ function createAtoms(options?: WebpackAtomsOptions): WebpackAtoms {
 
     rules.css = opts => ({
       oneOf: [
-        { ...css({ ...options, modules: true }), test: /\.module\.css$/ },
+        { ...css({ ...opts, modules: true }), test: /\.module\.css$/ },
         css(opts),
       ],
     })
