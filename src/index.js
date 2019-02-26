@@ -213,7 +213,6 @@ function createAtoms(options?: WebpackAtomsOptions): WebpackAtoms {
     css: (options = {}) => ({
       loader: require.resolve('css-loader'),
       options: {
-        minimize: PRODUCTION,
         sourceMap: !PRODUCTION,
         camelCase: 'dashes',
         // https://github.com/webpack-contrib/css-loader/issues/406
