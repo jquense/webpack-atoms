@@ -1,3 +1,14 @@
+## [10.0.1](https://github.com/jquense/webpack-atoms/compare/v10.0.0...v10.0.1) (2019-02-26)
+
+
+### Bug Fixes
+
+* css-loader extra options ([ec09d8a](https://github.com/jquense/webpack-atoms/commit/ec09d8a))
+
+
+
+
+
 # [10.0.0](https://github.com/jquense/webpack-atoms/compare/v9.1.0...v10.0.0) (2019-02-15)
 
 
