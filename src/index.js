@@ -378,8 +378,8 @@ function createAtoms(options?: WebpackAtomsOptions): WebpackAtoms {
       use: [loaders.astroturf(options)],
     })
 
-    astroturf.sass = opts => astroturf({ extension: 'module.scss', ...opts })
-    astroturf.less = opts => astroturf({ extension: 'module.scss', ...opts })
+    astroturf.sass = opts => astroturf({ extension: '.module.scss', ...opts })
+    astroturf.less = opts => astroturf({ extension: '.module.less', ...opts })
 
     rules.astroturf = astroturf
   }
