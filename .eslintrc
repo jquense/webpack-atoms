@@ -1,4 +1,4 @@
 {
-  "extends": ["jason"],
+  "extends": ["jason", "4catalyzer-typescript"],
   "parser": "babel-eslint"
 }

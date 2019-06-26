@@ -1,4 +1,6 @@
-const stats = {
+import webpack from 'webpack'
+
+const stats: webpack.Stats.ToStringOptionsObject = {
   hash: false,
   version: false,
   timings: false,
@@ -20,4 +22,4 @@ const stats = {
   performance: false,
 }
 
-module.exports = stats
+export default stats
