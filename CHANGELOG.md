@@ -1,3 +1,14 @@
+## [11.0.1](https://github.com/jquense/webpack-atoms/compare/v11.0.0...v11.0.1) (2019-06-26)
+
+
+### Bug Fixes
+
+* exports ([74581b6](https://github.com/jquense/webpack-atoms/commit/74581b6))
+
+
+
+
+
 # [11.0.0](https://github.com/jquense/webpack-atoms/compare/v10.0.2...v11.0.0) (2019-06-26)
 
 
