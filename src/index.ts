@@ -624,7 +624,7 @@ function createAtoms(options: WebpackAtomsOptions = {}): WebpackAtoms {
   }
 }
 
-export default {
+module.exports = {
   ...createAtoms(),
   createAtoms,
 }
