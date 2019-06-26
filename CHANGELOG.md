@@ -1,3 +1,14 @@
+## [11.0.2](https://github.com/jquense/webpack-atoms/compare/v11.0.1...v11.0.2) (2019-06-26)
+
+
+### Bug Fixes
+
+* astroturf rule properties ([9a8d6c9](https://github.com/jquense/webpack-atoms/commit/9a8d6c9))
+
+
+
+
+
 ## [11.0.1](https://github.com/jquense/webpack-atoms/compare/v11.0.0...v11.0.1) (2019-06-26)
 
 
