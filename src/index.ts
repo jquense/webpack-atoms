@@ -244,10 +244,15 @@ function createAtoms(options: WebpackAtomsOptions = {}): WebpackAtoms {
       loader: require.resolve('css-loader'),
       options: {
         sourceMap: !PRODUCTION,
-        camelCase: 'dashes',
-        // https://github.com/webpack-contrib/css-loader/issues/406
-        localIdentName: '[name]--[local]--[hash:base64:5]',
+        localsConvention: 'dashes',
         ...options,
+        modules: options.modules
+          ? {
+              // https://github.com/webpack-contrib/css-loader/issues/406
+              localIdentName: '[name]--[local]--[hash:base64:5]',
+              ...options.modules,
+            }
+          : false,
       },
     }),
 
