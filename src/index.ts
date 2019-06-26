@@ -401,7 +401,7 @@ function createAtoms(options: WebpackAtomsOptions = {}): WebpackAtoms {
       use: [loaders.astroturf(options)],
     })
 
-    Object.assign({
+    Object.assign(astroturf, {
       sass: opts => astroturf({ extension: '.module.scss', ...opts }),
       less: opts => astroturf({ extension: '.module.less', ...opts }),
     })
