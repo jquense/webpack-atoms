@@ -1,3 +1,19 @@
+# [11.0.0](https://github.com/jquense/webpack-atoms/compare/v10.0.2...v11.0.0) (2019-06-26)
+
+
+### Features
+
+* bump all the deps ([04d2a9e](https://github.com/jquense/webpack-atoms/commit/04d2a9e))
+
+
+### BREAKING CHANGES
+
+* update everything
+
+
+
+
+
 ## [10.0.2](https://github.com/jquense/webpack-atoms/compare/v10.0.1...v10.0.2) (2019-02-26)
 
 
