@@ -24,7 +24,7 @@ module.exports = {
   },
 
   plugins: [
-    plugins.ugilfy(),
+    plugins.uglify(),
     plugins.loaderOptions(),
     plugins.extractText(),
   ]
