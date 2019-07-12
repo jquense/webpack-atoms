@@ -1,3 +1,14 @@
+## [11.0.4](https://github.com/jquense/webpack-atoms/compare/v11.0.3...v11.0.4) (2019-07-12)
+
+
+### Bug Fixes
+
+* options on css loaders ([66190a0](https://github.com/jquense/webpack-atoms/commit/66190a0))
+
+
+
+
+
 ## [11.0.3](https://github.com/jquense/webpack-atoms/compare/v11.0.2...v11.0.3) (2019-06-26)
 
 
