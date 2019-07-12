@@ -11,6 +11,7 @@ import { UnusedFilesWebpackPlugin } from 'unused-files-webpack-plugin'
 import FaviconsWebpackPlugin from 'favicons-webpack-plugin'
 import webpack, { Loader } from 'webpack'
 import { loadConfig } from 'browserslist'
+import { getLocalIdent } from 'css-loader/dist/utils'
 
 import builtinPlugins from './plugins'
 import statsConfig from './stats'
@@ -146,6 +147,15 @@ export type WebpackAtoms = {
 let VENDOR_MODULE_REGEX = /node_modules/
 let DEFAULT_BROWSERS = ['> 1%', 'Firefox ESR', 'not ie < 9']
 
+function getSafeLocalIdent(loaderContext, localIdentName, localName, options) {
+  return getLocalIdent(
+    loaderContext,
+    localIdentName,
+    localName,
+    options
+  ).replace(/\./g, '_')
+}
+
 function createAtoms(options: WebpackAtomsOptions = {}): WebpackAtoms {
   let {
     babelConfig = {},
@@ -250,6 +260,7 @@ function createAtoms(options: WebpackAtomsOptions = {}): WebpackAtoms {
           ? {
               // https://github.com/webpack-contrib/css-loader/issues/406
               localIdentName: '[name]--[local]--[hash:base64:5]',
+              getLocalIdent: getSafeLocalIdent,
               ...options.modules,
             }
           : false,
@@ -428,9 +439,9 @@ function createAtoms(options: WebpackAtomsOptions = {}): WebpackAtoms {
       }),
     })
 
-    rules.css = makeContextual(opts => ({
+    rules.css = makeContextual(({ modules = true, ...opts }: any = {}) => ({
       oneOf: [
-        { ...css({ ...opts, modules: true }), test: /\.module\.css$/ },
+        { ...css({ ...opts, modules }), test: /\.module\.css$/ },
         css(opts),
       ],
     }))
@@ -451,9 +462,9 @@ function createAtoms(options: WebpackAtomsOptions = {}): WebpackAtoms {
       }),
     })
 
-    rules.postcss = makeContextual(opts => ({
+    rules.postcss = makeContextual(({ modules = true, ...opts }: any = {}) => ({
       oneOf: [
-        { ...postcss({ ...options, modules: true }), test: /\.module\.css$/ },
+        { ...postcss({ ...opts, modules }), test: /\.module\.css$/ },
         postcss(opts),
       ],
     }))
@@ -475,9 +486,9 @@ function createAtoms(options: WebpackAtomsOptions = {}): WebpackAtoms {
       }),
     })
 
-    rules.less = makeContextual(opts => ({
+    rules.less = makeContextual(({ modules = true, ...opts }: any = {}) => ({
       oneOf: [
-        { ...less({ ...options, modules: true }), test: /\.module\.less$/ },
+        { ...less({ ...opts, modules }), test: /\.module\.less$/ },
         less(opts),
       ],
     }))
@@ -499,9 +510,9 @@ function createAtoms(options: WebpackAtomsOptions = {}): WebpackAtoms {
       }),
     })
 
-    rules.sass = makeContextual(opts => ({
+    rules.sass = makeContextual(({ modules = true, ...opts }: any = {}) => ({
       oneOf: [
-        { ...sass({ ...options, modules: true }), test: /\.module\.s(a|c)ss$/ },
+        { ...sass({ ...opts, modules }), test: /\.module\.s(a|c)ss$/ },
         sass(opts),
       ],
     }))
@@ -523,15 +534,17 @@ function createAtoms(options: WebpackAtomsOptions = {}): WebpackAtoms {
       }),
     })
 
-    rules.fastSass = makeContextual(opts => ({
-      oneOf: [
-        {
-          ...fastSass({ ...options, modules: true }),
-          test: /\.module\.s(a|c)ss$/,
-        },
-        fastSass(opts),
-      ],
-    }))
+    rules.fastSass = makeContextual(
+      ({ modules = true, ...opts }: any = {}) => ({
+        oneOf: [
+          {
+            ...fastSass({ ...opts, modules }),
+            test: /\.module\.s(a|c)ss$/,
+          },
+          fastSass(opts),
+        ],
+      })
+    )
   }
 
   /**
