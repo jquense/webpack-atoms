@@ -1,3 +1,14 @@
+# [11.1.0](https://github.com/jquense/webpack-atoms/compare/v11.0.4...v11.1.0) (2019-08-30)
+
+
+### Features
+
+* use fork of unused files plugin ([b41f407](https://github.com/jquense/webpack-atoms/commit/b41f407))
+
+
+
+
+
 ## [11.0.4](https://github.com/jquense/webpack-atoms/compare/v11.0.3...v11.0.4) (2019-07-12)
 
 
