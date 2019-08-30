@@ -1,6 +1,4 @@
-// @flow
-
-import webpack, { optimize } from 'webpack'
+import webpack from 'webpack'
 
 type GetConstructorArgs<T> = T extends new (...args: infer U) => any ? U : never
 

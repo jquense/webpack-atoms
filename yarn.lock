@@ -132,6 +132,13 @@
   dependencies:
     typescript-workspace-plugin "^2.0.1"
 
+"@4c/unused-files-webpack-plugin@^4.0.0":
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/@4c/unused-files-webpack-plugin/-/unused-files-webpack-plugin-4.0.0.tgz#268182526faaf7afc5075f3c02995af3b0dd89ad"
+  integrity sha512-LwbubCWfUZdpiwYprl+FQaXihVDestWVf9Gpa833CQc+ErNgGgb3RSnL02Lq4l90z0Gtc6lZFZHKnzQyKLhFLg==
+  dependencies:
+    glob-all "^3.1.0"
+
 "@babel/cli@^7.2.3":
   version "7.2.3"
   resolved "https://registry.yarnpkg.com/@babel/cli/-/cli-7.2.3.tgz#1b262e42a3e959d28ab3d205ba2718e1923cfee6"
@@ -1678,14 +1685,6 @@ babel-loader@^8.0.6:
     mkdirp "^0.5.1"
     pify "^4.0.1"
 
-babel-runtime@^7.0.0-beta.3:
-  version "7.0.0-beta.3"
-  resolved "https://registry.yarnpkg.com/babel-runtime/-/babel-runtime-7.0.0-beta.3.tgz#7c750de5514452c27612172506b49085a4a630f2"
-  integrity sha512-jlzZ8RACjt0QGxq+wqsw5bCQE9RcUyWpw987mDY3GYxTpOQT2xoyNoG++oVCHzr/nACLBIprfVBNvv/If1ZYcg==
-  dependencies:
-    core-js "^2.4.0"
-    regenerator-runtime "^0.11.0"
-
 balanced-match@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/balanced-match/-/balanced-match-1.0.0.tgz#89b4d199ab2bee49de164ea02b89ce462d71b767"
@@ -2723,11 +2722,6 @@ core-js-pure@3.1.4:
   version "3.1.4"
   resolved "https://registry.yarnpkg.com/core-js-pure/-/core-js-pure-3.1.4.tgz#5fa17dc77002a169a3566cc48dc774d2e13e3769"
   integrity sha512-uJ4Z7iPNwiu1foygbcZYJsJs1jiXrTTCvxfLDXNhI/I+NHbSIEyr548y4fcsCEyWY0XgfAG/qqaunJ1SThHenA==
-
-core-js@^2.4.0:
-  version "2.5.7"
-  resolved "https://registry.yarnpkg.com/core-js/-/core-js-2.5.7.tgz#f972608ff0cead68b841a16a932d0b183791814e"
-  integrity sha512-RszJCAxg/PP6uzXVXL6BsxSXx/B05oJAQ2vkJRjyjrEcNVycaqOmNb5OTxZPE3xa5gwZduqza6L9JOCenh/Ecw==
 
 core-js@^2.4.1:
   version "2.6.9"
@@ -7746,11 +7740,6 @@ regenerate@^1.4.0:
   resolved "https://registry.yarnpkg.com/regenerate/-/regenerate-1.4.0.tgz#4a856ec4b56e4077c557589cae85e7a4c8869a11"
   integrity sha512-1G6jJVDWrt0rK99kBjvEtziZNCICAuvIPkSiUFIQxVP06RCVpq3dmDo2oi6ABpYaDYaTRr67BEhL8r1wgEZZKg==
 
-regenerator-runtime@^0.11.0:
-  version "0.11.1"
-  resolved "https://registry.yarnpkg.com/regenerator-runtime/-/regenerator-runtime-0.11.1.tgz#be05ad7f9bf7d22e056f9726cee5017fbf19e2e9"
-  integrity sha512-MguG95oij0fC3QV3URf4V2SDYGJhJnJGqvIIgdECeODCT98wSWDAJ94SSuVpYQUoTcGUIL6L4yNB7j1DFFHSBg==
-
 regenerator-transform@^0.14.0:
   version "0.14.0"
   resolved "https://registry.yarnpkg.com/regenerator-transform/-/regenerator-transform-0.14.0.tgz#2ca9aaf7a2c239dd32e4761218425b8c7a86ecaf"
@@ -9009,17 +8998,6 @@ unset-value@^1.0.0:
     has-value "^0.3.1"
     isobject "^3.0.0"
 
-unused-files-webpack-plugin@^3.4.0:
-  version "3.4.0"
-  resolved "https://registry.yarnpkg.com/unused-files-webpack-plugin/-/unused-files-webpack-plugin-3.4.0.tgz#adc67a3b5549d028818d3119cbf2b5c88aea8670"
-  integrity sha512-cmukKOBdIqaM1pqThY0+jp+mYgCVyzrD8uRbKEucQwIGZcLIRn+gSRiQ7uLjcDd3Zba9NUxVGyYa7lWM4UCGeg==
-  dependencies:
-    babel-runtime "^7.0.0-beta.3"
-    glob-all "^3.1.0"
-    semver "^5.5.0"
-    util.promisify "^1.0.0"
-    warning "^3.0.0"
-
 upath@^1.0.0:
   version "1.0.5"
   resolved "https://registry.yarnpkg.com/upath/-/upath-1.0.5.tgz#02cab9ecebe95bbec6d5fc2566325725ab6d1a73"
@@ -9093,7 +9071,7 @@ util-deprecate@^1.0.1, util-deprecate@~1.0.1:
   resolved "https://registry.yarnpkg.com/util-deprecate/-/util-deprecate-1.0.2.tgz#450d4dc9fa70de732762fbd2d4a28981419a0ccf"
   integrity sha1-RQ1Nyfpw3nMnYvvS1KKJgUGaDM8=
 
-util.promisify@1.0.0, util.promisify@^1.0.0, util.promisify@~1.0.0:
+util.promisify@1.0.0, util.promisify@~1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/util.promisify/-/util.promisify-1.0.0.tgz#440f7165a459c9a16dc145eb8e72f35687097030"
   integrity sha512-i+6qA2MPhvoKLuxnJNpXAGhg7HphQOSUq2LKMZD0m15EiskXUkMvKdF4Uui0WYeCUGea+o2cw/ZuwehtfsrNkA==
@@ -9160,13 +9138,6 @@ vm-browserify@0.0.4:
   integrity sha1-XX6kW7755Kb/ZflUOOCofDV9WnM=
   dependencies:
     indexof "0.0.1"
-
-warning@^3.0.0:
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/warning/-/warning-3.0.0.tgz#32e5377cb572de4ab04753bdf8821c01ed605b7c"
-  integrity sha1-MuU3fLVy3kqwR1O9+IIcAe1gW3w=
-  dependencies:
-    loose-envify "^1.0.0"
 
 watchpack@^1.5.0:
   version "1.6.0"
