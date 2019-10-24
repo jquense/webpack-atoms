@@ -1,3 +1,19 @@
+# [12.0.0](https://github.com/jquense/webpack-atoms/compare/v11.1.1...v12.0.0) (2019-10-24)
+
+
+### chore
+
+* bump deps ([1ca83d7](https://github.com/jquense/webpack-atoms/commit/1ca83d7))
+
+
+### BREAKING CHANGES
+
+* lots of breaking loader and plugin updates
+
+
+
+
+
 ## [11.1.1](https://github.com/jquense/webpack-atoms/compare/v11.1.0...v11.1.1) (2019-10-24)
 
 
