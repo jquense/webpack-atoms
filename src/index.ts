@@ -426,15 +426,18 @@ function createAtoms(options: WebpackAtomsOptions = {}): WebpackAtoms {
    * CSS style loader.
    */
   {
-    const css = ({ browsers, ...options }: any = {}) => ({
+    const css = ({ browsers, extract, ...options }: any = {}) => ({
       test: /\.css$/,
-      use: makeExtractLoaders(options, {
-        fallback: loaders.style(),
-        use: [
-          loaders.css({ ...options, importLoaders: 1 }),
-          loaders.postcss({ browsers }),
-        ],
-      }),
+      use: makeExtractLoaders(
+        { extract },
+        {
+          fallback: loaders.style(),
+          use: [
+            loaders.css({ ...options, importLoaders: 1 }),
+            loaders.postcss({ browsers }),
+          ],
+        }
+      ),
     })
 
     rules.css = makeContextual(({ modules = true, ...opts }: any = {}) => ({
@@ -449,15 +452,18 @@ function createAtoms(options: WebpackAtomsOptions = {}): WebpackAtoms {
    * PostCSS loader.
    */
   {
-    const postcss = ({ modules, ...opts }: any = {}) => ({
+    const postcss = ({ modules, extract, ...opts }: any = {}) => ({
       test: /\.css$/,
-      use: makeExtractLoaders(opts, {
-        fallback: loaders.style(),
-        use: [
-          loaders.css({ importLoaders: 1, modules }),
-          loaders.postcss(opts),
-        ],
-      }),
+      use: makeExtractLoaders(
+        { extract },
+        {
+          fallback: loaders.style(),
+          use: [
+            loaders.css({ importLoaders: 1, modules }),
+            loaders.postcss(opts),
+          ],
+        }
+      ),
     })
 
     rules.postcss = makeContextual(({ modules = true, ...opts }: any = {}) => ({
@@ -472,16 +478,19 @@ function createAtoms(options: WebpackAtomsOptions = {}): WebpackAtoms {
    * Less style loader.
    */
   {
-    const less = ({ modules, browsers, ...options }: any = {}) => ({
+    const less = ({ modules, browsers, extract, ...options }: any = {}) => ({
       test: /\.less$/,
-      use: makeExtractLoaders(options, {
-        fallback: loaders.style(),
-        use: [
-          loaders.css({ importLoaders: 2, modules }),
-          loaders.postcss({ browsers }),
-          loaders.less(options),
-        ],
-      }),
+      use: makeExtractLoaders(
+        { extract },
+        {
+          fallback: loaders.style(),
+          use: [
+            loaders.css({ importLoaders: 2, modules }),
+            loaders.postcss({ browsers }),
+            loaders.less(options),
+          ],
+        }
+      ),
     })
 
     rules.less = makeContextual(({ modules = true, ...opts }: any = {}) => ({
@@ -496,16 +505,19 @@ function createAtoms(options: WebpackAtomsOptions = {}): WebpackAtoms {
    * SASS style loader, excludes node_modules.
    */
   {
-    const sass = ({ browsers, modules, ...options }: any = {}) => ({
+    const sass = ({ browsers, modules, extract, ...options }: any = {}) => ({
       test: /\.s(a|c)ss$/,
-      use: makeExtractLoaders(options, {
-        fallback: loaders.style(),
-        use: [
-          loaders.css({ importLoaders: 2, modules }),
-          loaders.postcss({ browsers }),
-          loaders.sass(options),
-        ],
-      }),
+      use: makeExtractLoaders(
+        { extract },
+        {
+          fallback: loaders.style(),
+          use: [
+            loaders.css({ importLoaders: 2, modules }),
+            loaders.postcss({ browsers }),
+            loaders.sass(options),
+          ],
+        }
+      ),
     })
 
     rules.sass = makeContextual(({ modules = true, ...opts }: any = {}) => ({
@@ -520,16 +532,24 @@ function createAtoms(options: WebpackAtomsOptions = {}): WebpackAtoms {
    * fast SASS style loader, excludes node_modules.
    */
   {
-    const fastSass = ({ browsers, modules, ...options }: any = {}) => ({
+    const fastSass = ({
+      browsers,
+      modules,
+      extract,
+      ...options
+    }: any = {}) => ({
       test: /\.s(a|c)ss$/,
-      use: makeExtractLoaders(options, {
-        fallback: loaders.style(),
-        use: [
-          loaders.css({ importLoaders: 2, modules }),
-          loaders.postcss({ browsers }),
-          loaders.fastSass(options),
-        ],
-      }),
+      use: makeExtractLoaders(
+        { extract },
+        {
+          fallback: loaders.style(),
+          use: [
+            loaders.css({ importLoaders: 2, modules }),
+            loaders.postcss({ browsers }),
+            loaders.fastSass(options),
+          ],
+        }
+      ),
     })
 
     rules.fastSass = makeContextual(
