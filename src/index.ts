@@ -2,7 +2,6 @@ import path from "path";
 import autoprefixer from "autoprefixer";
 import { loadConfig } from "browserslist";
 import CopyWebpackPlugin from "copy-webpack-plugin";
-import { getLocalIdent } from "css-loader/dist/utils";
 import FaviconsWebpackPlugin from "favicons-webpack-plugin";
 import HtmlWebpackPlugin from "html-webpack-plugin";
 import MiniCssExtractPlugin from "mini-css-extract-plugin";
@@ -145,15 +144,6 @@ export type WebpackAtoms = {
 let VENDOR_MODULE_REGEX = /node_modules/;
 let DEFAULT_BROWSERS = ["> 1%", "Firefox ESR", "not ie < 9"];
 
-function getSafeLocalIdent(loaderContext, localIdentName, localName, options) {
-  return getLocalIdent(
-    loaderContext,
-    localIdentName,
-    localName,
-    options
-  ).replace(/\./g, "_");
-}
-
 function createAtoms(options: WebpackAtomsOptions = {}): WebpackAtoms {
   let {
     babelConfig = {},
@@ -258,7 +248,6 @@ function createAtoms(options: WebpackAtomsOptions = {}): WebpackAtoms {
           ? {
               // https://github.com/webpack-contrib/css-loader/issues/406
               localIdentName: "[name]--[local]--[hash:base64:5]",
-              getLocalIdent: getSafeLocalIdent,
               ...options.modules
             }
           : false
