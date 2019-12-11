@@ -1,3 +1,14 @@
+## [12.0.1](https://github.com/jquense/webpack-atoms/compare/v12.0.0...v12.0.1) (2019-12-11)
+
+
+### Bug Fixes
+
+* postcss plugin ordering and copy-plugin version ([9da0d70](https://github.com/jquense/webpack-atoms/commit/9da0d7090e1413f2b21a47724ddf511a7bb863fc))
+
+
+
+
+
 # [12.0.0](https://github.com/jquense/webpack-atoms/compare/v11.1.1...v12.0.0) (2019-10-24)
 
 
