@@ -1,3 +1,14 @@
+## [12.0.2](https://github.com/jquense/webpack-atoms/compare/v12.0.1...v12.0.2) (2019-12-11)
+
+
+### Bug Fixes
+
+* css-laoder ([9b3803c](https://github.com/jquense/webpack-atoms/commit/9b3803c5ee75a1dcbb30adaee5ada6c813ae00aa))
+
+
+
+
+
 ## [12.0.1](https://github.com/jquense/webpack-atoms/compare/v12.0.0...v12.0.1) (2019-12-11)
 
 
