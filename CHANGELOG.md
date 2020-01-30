@@ -1,3 +1,14 @@
+# [12.1.0](https://github.com/jquense/webpack-atoms/compare/v12.0.2...v12.1.0) (2020-01-30)
+
+
+### Features
+
+* rm unneeded flexbugs ([7f1fd0c](https://github.com/jquense/webpack-atoms/commit/7f1fd0cf98cb044e22bd01422e56977ee7024e8e))
+
+
+
+
+
 ## [12.0.2](https://github.com/jquense/webpack-atoms/compare/v12.0.1...v12.0.2) (2019-12-11)
 
 
