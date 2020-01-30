@@ -1,229 +1,228 @@
-import path from "path";
-import autoprefixer from "autoprefixer";
-import { loadConfig } from "browserslist";
-import CopyWebpackPlugin from "copy-webpack-plugin";
-import FaviconsWebpackPlugin from "favicons-webpack-plugin";
-import HtmlWebpackPlugin from "html-webpack-plugin";
-import MiniCssExtractPlugin from "mini-css-extract-plugin";
-import OptimizeCssAssetsPlugin from "optimize-css-assets-webpack-plugin";
-import flexbugs from "postcss-flexbugs-fixes";
-import TerserPlugin from "terser-webpack-plugin";
-import webpack, { Loader } from "webpack";
-import UnusedFilesWebpackPlugin from "@4c/unused-files-webpack-plugin";
-import builtinPlugins from "./plugins";
-import statsConfig from "./stats";
+import path from 'path'
+import autoprefixer from 'autoprefixer'
+import { loadConfig } from 'browserslist'
+import CopyWebpackPlugin from 'copy-webpack-plugin'
+import FaviconsWebpackPlugin from 'favicons-webpack-plugin'
+import HtmlWebpackPlugin from 'html-webpack-plugin'
+import MiniCssExtractPlugin from 'mini-css-extract-plugin'
+import OptimizeCssAssetsPlugin from 'optimize-css-assets-webpack-plugin'
+import TerserPlugin from 'terser-webpack-plugin'
+import webpack, { Loader } from 'webpack'
+import UnusedFilesWebpackPlugin from '@4c/unused-files-webpack-plugin'
+import builtinPlugins from './plugins'
+import statsConfig from './stats'
 
-export type Env = "production" | "test" | "development";
+export type Env = 'production' | 'test' | 'development'
 
-export type LoaderResolver<T extends {}> = (options?: T) => webpack.Loader;
+export type LoaderResolver<T extends {}> = (options?: T) => webpack.Loader
 
-type Rule = webpack.RuleSetRule;
+type Rule = webpack.RuleSetRule
 
-export type RuleFactory<T extends {} = {}> = (options?: T) => Rule;
+export type RuleFactory<T extends {} = {}> = (options?: T) => Rule
 
 export type ContextualRuleFactory<T = {}> = RuleFactory<T> & {
-  internal: RuleFactory<T>;
-  external: RuleFactory<T>;
-};
+  internal: RuleFactory<T>
+  external: RuleFactory<T>
+}
 
 export interface AstroTurfOptions {
-  getFileName?(path: string, opts: AstroTurfOptions, id: string): string;
-  allowGlobal?: boolean;
-  extension?: string;
-  tagName?: string;
-  styleTag?: string;
+  getFileName?(path: string, opts: AstroTurfOptions, id: string): string
+  allowGlobal?: boolean
+  extension?: string
+  tagName?: string
+  styleTag?: string
 }
 
 export type AstroturfRuleFactory = RuleFactory<AstroTurfOptions> & {
-  sass: RuleFactory<AstroTurfOptions>;
-  less: RuleFactory<AstroTurfOptions>;
-};
+  sass: RuleFactory<AstroTurfOptions>
+  less: RuleFactory<AstroTurfOptions>
+}
 
-type PluginInstance = any;
-type PluginFactory = (...args: any) => PluginInstance;
+type PluginInstance = any
+type PluginFactory = (...args: any) => PluginInstance
 
-type BuiltinPlugins = typeof builtinPlugins;
+type BuiltinPlugins = typeof builtinPlugins
 
 type StatAtoms = {
-  none: webpack.Options.Stats;
-  minimal: webpack.Options.Stats;
-};
+  none: webpack.Options.Stats
+  minimal: webpack.Options.Stats
+}
 
 export type WebpackAtomsOptions = {
-  babelConfig?: {};
-  browsers?: string[];
-  vendorRegex?: RegExp;
-  env?: Env | null;
-  assetRelativeRoot?: string;
-  disableMiniExtractInDev?: boolean;
-  ignoreBrowserslistConfig?: boolean;
-};
+  babelConfig?: {}
+  browsers?: string[]
+  vendorRegex?: RegExp
+  env?: Env | null
+  assetRelativeRoot?: string
+  disableMiniExtractInDev?: boolean
+  ignoreBrowserslistConfig?: boolean
+}
 
 export type LoaderAtoms = {
-  json: LoaderResolver<any>;
-  yaml: LoaderResolver<any>;
-  null: LoaderResolver<any>;
-  raw: LoaderResolver<any>;
+  json: LoaderResolver<any>
+  yaml: LoaderResolver<any>
+  null: LoaderResolver<any>
+  raw: LoaderResolver<any>
 
-  style: LoaderResolver<any>;
-  css: LoaderResolver<any>;
+  style: LoaderResolver<any>
+  css: LoaderResolver<any>
   miniCssExtract: LoaderResolver<
     {
-      disable?: boolean;
-      fallback?: Loader;
+      disable?: boolean
+      fallback?: Loader
     } & MiniCssExtractPlugin.PluginOptions
-  >;
-  astroturf: LoaderResolver<any>;
+  >
+  astroturf: LoaderResolver<any>
   postcss: LoaderResolver<{
-    browsers?: string[];
-    plugins?: any[] | ((loader: any) => any[]);
-  }>;
-  less: LoaderResolver<any>;
-  sass: LoaderResolver<any>;
-  fastSass: LoaderResolver<any>;
+    browsers?: string[]
+    plugins?: any[] | ((loader: any) => any[])
+  }>
+  less: LoaderResolver<any>
+  sass: LoaderResolver<any>
+  fastSass: LoaderResolver<any>
 
-  file: LoaderResolver<any>;
-  url: LoaderResolver<any>;
-  js: LoaderResolver<any>;
+  file: LoaderResolver<any>
+  url: LoaderResolver<any>
+  js: LoaderResolver<any>
 
-  imports: LoaderResolver<any>;
-  exports: LoaderResolver<any>;
-};
+  imports: LoaderResolver<any>
+  exports: LoaderResolver<any>
+}
 
 type JsRule = RuleFactory<any> & {
-  inlineCss: RuleFactory<any>;
-};
+  inlineCss: RuleFactory<any>
+}
 
 export type RuleAtoms = {
-  js: JsRule;
-  yaml: RuleFactory<any>;
-  fonts: RuleFactory<any>;
-  images: RuleFactory<any>;
-  audioVideo: RuleFactory<any>;
-  files: RuleFactory<any>;
+  js: JsRule
+  yaml: RuleFactory<any>
+  fonts: RuleFactory<any>
+  images: RuleFactory<any>
+  audioVideo: RuleFactory<any>
+  files: RuleFactory<any>
 
-  css: ContextualRuleFactory;
-  postcss: ContextualRuleFactory;
-  less: ContextualRuleFactory;
-  sass: ContextualRuleFactory;
-  fastSass: ContextualRuleFactory;
+  css: ContextualRuleFactory
+  postcss: ContextualRuleFactory
+  less: ContextualRuleFactory
+  sass: ContextualRuleFactory
+  fastSass: ContextualRuleFactory
 
-  astroturf: AstroturfRuleFactory;
-};
+  astroturf: AstroturfRuleFactory
+}
 
 export type PluginAtoms = BuiltinPlugins & {
-  define: PluginFactory;
-  extractCss: PluginFactory;
-  html: PluginFactory;
-  loaderOptions: PluginFactory;
-  moment: PluginFactory;
-  minifyJs: PluginFactory;
-  minifyCss: PluginFactory;
-  unusedFiles: PluginFactory;
-  favicons: PluginFactory;
-  copy: PluginFactory;
-};
+  define: PluginFactory
+  extractCss: PluginFactory
+  html: PluginFactory
+  loaderOptions: PluginFactory
+  moment: PluginFactory
+  minifyJs: PluginFactory
+  minifyCss: PluginFactory
+  unusedFiles: PluginFactory
+  favicons: PluginFactory
+  copy: PluginFactory
+}
 
 export type WebpackAtoms = {
-  loaders: LoaderAtoms;
+  loaders: LoaderAtoms
 
-  rules: RuleAtoms;
+  rules: RuleAtoms
 
-  plugins: PluginAtoms;
+  plugins: PluginAtoms
 
-  stats: StatAtoms;
+  stats: StatAtoms
 
-  makeExternalOnly: (original: RuleFactory<any>) => RuleFactory<any>;
-  makeInternalOnly: (original: RuleFactory<any>) => RuleFactory<any>;
+  makeExternalOnly: (original: RuleFactory<any>) => RuleFactory<any>
+  makeInternalOnly: (original: RuleFactory<any>) => RuleFactory<any>
   makeExtractLoaders: (
     options: { extract?: boolean },
-    config: { fallback: Loader; use: Loader[] }
-  ) => Loader[];
-};
+    config: { fallback: Loader; use: Loader[] },
+  ) => Loader[]
+}
 
-let VENDOR_MODULE_REGEX = /node_modules/;
-let DEFAULT_BROWSERS = ["> 1%", "Firefox ESR", "not ie < 9"];
+let VENDOR_MODULE_REGEX = /node_modules/
+let DEFAULT_BROWSERS = ['> 1%', 'Firefox ESR', 'not ie < 9']
 
 function createAtoms(options: WebpackAtomsOptions = {}): WebpackAtoms {
   let {
     babelConfig = {},
-    assetRelativeRoot = "",
+    assetRelativeRoot = '',
     env = process.env.NODE_ENV,
     vendorRegex = VENDOR_MODULE_REGEX,
     disableMiniExtractInDev = true,
     ignoreBrowserslistConfig = false,
-    browsers: supportedBrowsers
-  } = options;
+    browsers: supportedBrowsers,
+  } = options
 
-  const hasBrowsersListConfig = !!loadConfig({ path: path.resolve(".") });
+  const hasBrowsersListConfig = !!loadConfig({ path: path.resolve('.') })
 
   if (ignoreBrowserslistConfig || !hasBrowsersListConfig) {
-    supportedBrowsers = supportedBrowsers || DEFAULT_BROWSERS;
+    supportedBrowsers = supportedBrowsers || DEFAULT_BROWSERS
   }
 
   const makeExternalOnly = (original: RuleFactory<any>) => (
-    options = {}
+    options = {},
   ): Rule => {
-    let rule = original(options);
-    rule.include = vendorRegex;
-    return rule;
-  };
+    let rule = original(options)
+    rule.include = vendorRegex
+    return rule
+  }
 
   const makeInternalOnly = (original: RuleFactory<any>) => (
-    options = {}
+    options = {},
   ): Rule => {
-    let rule = original(options);
-    rule.exclude = vendorRegex;
-    return rule;
-  };
+    let rule = original(options)
+    rule.exclude = vendorRegex
+    return rule
+  }
 
   const makeContextual = <T>(
-    rule: RuleFactory<T>
+    rule: RuleFactory<T>,
   ): ContextualRuleFactory<T> => {
     return Object.assign(rule, {
       external: makeExternalOnly(rule),
-      internal: makeInternalOnly(rule)
-    });
-  };
+      internal: makeInternalOnly(rule),
+    })
+  }
 
   const makeExtractLoaders = (
     { extract }: { extract?: boolean } = {},
-    config: { fallback: Loader; use: Loader[] }
+    config: { fallback: Loader; use: Loader[] },
   ): Loader[] => [
     // eslint-disable-next-line @typescript-eslint/no-use-before-define
     loaders.miniCssExtract({
       fallback: config.fallback,
-      disable: extract == undefined ? extract : !extract
+      disable: extract == undefined ? extract : !extract,
     }),
-    ...config.use
-  ];
+    ...config.use,
+  ]
 
-  const PRODUCTION = env === "production";
+  const PRODUCTION = env === 'production'
 
-  let ident = 0;
+  let ident = 0
 
   /**
    * Loaders
    */
   const loaders: LoaderAtoms = {
     json: () => ({
-      loader: require.resolve("json-loader")
+      loader: require.resolve('json-loader'),
     }),
 
     yaml: () => ({
-      loader: require.resolve("yaml-loader")
+      loader: require.resolve('yaml-loader'),
     }),
 
     null: () => ({
-      loader: require.resolve("null-loader")
+      loader: require.resolve('null-loader'),
     }),
 
     raw: () => ({
-      loader: require.resolve("raw-loader")
+      loader: require.resolve('raw-loader'),
     }),
 
     style: () => ({
-      loader: require.resolve("style-loader")
+      loader: require.resolve('style-loader'),
     }),
 
     miniCssExtract: (opts = {}) => {
@@ -231,112 +230,111 @@ function createAtoms(options: WebpackAtomsOptions = {}): WebpackAtoms {
         disable = !PRODUCTION && disableMiniExtractInDev,
         fallback,
         ...options
-      } = opts!;
+      } = opts!
 
       return disable
         ? fallback || loaders.style()
-        : { loader: MiniCssExtractPlugin.loader, options };
+        : { loader: MiniCssExtractPlugin.loader, options }
     },
 
     css: (options = {}) => ({
-      loader: require.resolve("css-loader"),
+      loader: require.resolve('css-loader'),
       options: {
         sourceMap: !PRODUCTION,
-        localsConvention: "dashes",
+        localsConvention: 'dashes',
         ...options,
         modules: options.modules
           ? {
               // https://github.com/webpack-contrib/css-loader/issues/406
-              localIdentName: "[name]--[local]--[hash:base64:5]",
-              ...options.modules
+              localIdentName: '[name]--[local]--[hash:base64:5]',
+              ...options.modules,
             }
-          : false
-      }
+          : false,
+      },
     }),
 
     astroturf: options => ({
-      options: { extension: ".module.css", ...options },
-      loader: require.resolve("astroturf/loader")
+      options: { extension: '.module.css', ...options },
+      loader: require.resolve('astroturf/loader'),
     }),
 
     postcss: (options = {}) => {
-      let { plugins, browsers = supportedBrowsers, ...postcssOpts } = options;
+      let { plugins, browsers = supportedBrowsers, ...postcssOpts } = options
 
       return {
-        loader: require.resolve("postcss-loader"),
+        loader: require.resolve('postcss-loader'),
         options: {
           ident: `postcss-${++ident}`,
           plugins: loader => {
             plugins =
-              (typeof plugins === `function` ? plugins(loader) : plugins) || [];
+              (typeof plugins === `function` ? plugins(loader) : plugins) || []
 
             return [
               ...plugins,
-              flexbugs,
               // overrideBrowserslist is only set when browsers is explicit
               autoprefixer({
                 overrideBrowserslist: browsers,
-                flexbox: `no-2009`
-              })
-            ];
+                flexbox: `no-2009`,
+              }),
+            ]
           },
-          ...postcssOpts
-        }
-      };
+          ...postcssOpts,
+        },
+      }
     },
 
     less: (options = {}) => ({
       options,
-      loader: require.resolve("less-loader")
+      loader: require.resolve('less-loader'),
     }),
 
     sass: (options = {}) => ({
       options,
-      loader: require.resolve("sass-loader")
+      loader: require.resolve('sass-loader'),
     }),
 
     fastSass: (options = {}) => ({
       options,
-      loader: require.resolve("@4c/fast-sass-loader")
+      loader: require.resolve('@4c/fast-sass-loader'),
     }),
 
     file: (options = {}) => ({
-      loader: require.resolve("file-loader"),
+      loader: require.resolve('file-loader'),
       options: {
         name: `${assetRelativeRoot}[name]-[hash].[ext]`,
-        ...options
-      }
+        ...options,
+      },
     }),
 
     url: (options = {}) => ({
-      loader: require.resolve("url-loader"),
+      loader: require.resolve('url-loader'),
       options: {
         limit: 10000,
         name: `${assetRelativeRoot}[name]-[hash].[ext]`,
-        ...options
-      }
+        ...options,
+      },
     }),
 
     js: (options = babelConfig) => ({
       options,
-      loader: require.resolve("babel-loader")
+      loader: require.resolve('babel-loader'),
     }),
 
     imports: (options = {}) => ({
       options,
-      loader: require.resolve("imports-loader")
+      loader: require.resolve('imports-loader'),
     }),
 
     exports: (options = {}) => ({
       options,
-      loader: require.resolve("exports-loader")
-    })
-  };
+      loader: require.resolve('exports-loader'),
+    }),
+  }
 
   /**
    * Rules
    */
-  const rules: any = {};
+  const rules: any = {}
 
   /**
    * Javascript loader via babel, excludes node_modules
@@ -345,24 +343,24 @@ function createAtoms(options: WebpackAtomsOptions = {}): WebpackAtoms {
     let js = (options = {}) => ({
       test: /\.jsx?$/,
       exclude: vendorRegex,
-      use: [loaders.js(options)]
-    });
+      use: [loaders.js(options)],
+    })
 
-    rules.js = js;
+    rules.js = js
   }
 
   rules.yaml = () => ({
     test: /\.ya?ml/,
-    use: [loaders.json(), loaders.yaml()]
-  });
+    use: [loaders.json(), loaders.yaml()],
+  })
 
   /**
    * Font loader
    */
   rules.fonts = () => ({
     use: [loaders.url()],
-    test: /\.(eot|otf|ttf|woff(2)?)(\?.*)?$/
-  });
+    test: /\.(eot|otf|ttf|woff(2)?)(\?.*)?$/,
+  })
 
   /**
    * Loads image assets, inlines images via a data URI if they are below
@@ -370,16 +368,16 @@ function createAtoms(options: WebpackAtomsOptions = {}): WebpackAtoms {
    */
   rules.images = () => ({
     use: [loaders.url()],
-    test: /\.(ico|svg|jpg|jpeg|png|gif|webp)(\?.*)?$/
-  });
+    test: /\.(ico|svg|jpg|jpeg|png|gif|webp)(\?.*)?$/,
+  })
 
   /**
    * Loads audio or video assets
    */
   rules.audioVideo = () => ({
     use: [loaders.file()],
-    test: /\.(mp4|webm|wav|mp3|m4a|aac|oga|flac)$/
-  });
+    test: /\.(mp4|webm|wav|mp3|m4a|aac|oga|flac)$/,
+  })
 
   /**
    * A catch-all rule for everything that isn't js, json, or html.
@@ -392,8 +390,8 @@ function createAtoms(options: WebpackAtomsOptions = {}): WebpackAtoms {
     // Also exclude `html` and `json` extensions so they get processed
     // by webpacks internal loaders.
     exclude: [/\.jsx?$/, /\.html$/, /\.json$/],
-    use: [loaders.file()]
-  });
+    use: [loaders.file()],
+  })
 
   /**
    * Astroturf loader.
@@ -401,15 +399,15 @@ function createAtoms(options: WebpackAtomsOptions = {}): WebpackAtoms {
   {
     let astroturf = (options = {}) => ({
       test: /\.(j|t)sx?$/,
-      use: [loaders.astroturf(options)]
-    });
+      use: [loaders.astroturf(options)],
+    })
 
     Object.assign(astroturf, {
-      sass: opts => astroturf({ extension: ".module.scss", ...opts }),
-      less: opts => astroturf({ extension: ".module.less", ...opts })
-    });
+      sass: opts => astroturf({ extension: '.module.scss', ...opts }),
+      less: opts => astroturf({ extension: '.module.less', ...opts }),
+    })
 
-    rules.astroturf = astroturf as AstroturfRuleFactory;
+    rules.astroturf = astroturf as AstroturfRuleFactory
   }
   /**
    * CSS style loader.
@@ -423,18 +421,18 @@ function createAtoms(options: WebpackAtomsOptions = {}): WebpackAtoms {
           fallback: loaders.style(),
           use: [
             loaders.css({ ...options, importLoaders: 1 }),
-            loaders.postcss({ browsers })
-          ]
-        }
-      )
-    });
+            loaders.postcss({ browsers }),
+          ],
+        },
+      ),
+    })
 
     rules.css = makeContextual(({ modules = true, ...opts }: any = {}) => ({
       oneOf: [
         { ...css({ ...opts, modules }), test: /\.module\.css$/ },
-        css(opts)
-      ]
-    }));
+        css(opts),
+      ],
+    }))
   }
 
   /**
@@ -449,18 +447,18 @@ function createAtoms(options: WebpackAtomsOptions = {}): WebpackAtoms {
           fallback: loaders.style(),
           use: [
             loaders.css({ importLoaders: 1, modules }),
-            loaders.postcss(opts)
-          ]
-        }
-      )
-    });
+            loaders.postcss(opts),
+          ],
+        },
+      ),
+    })
 
     rules.postcss = makeContextual(({ modules = true, ...opts }: any = {}) => ({
       oneOf: [
         { ...postcss({ ...opts, modules }), test: /\.module\.css$/ },
-        postcss(opts)
-      ]
-    }));
+        postcss(opts),
+      ],
+    }))
   }
 
   /**
@@ -476,18 +474,18 @@ function createAtoms(options: WebpackAtomsOptions = {}): WebpackAtoms {
           use: [
             loaders.css({ importLoaders: 2, modules }),
             loaders.postcss({ browsers }),
-            loaders.less(options)
-          ]
-        }
-      )
-    });
+            loaders.less(options),
+          ],
+        },
+      ),
+    })
 
     rules.less = makeContextual(({ modules = true, ...opts }: any = {}) => ({
       oneOf: [
         { ...less({ ...opts, modules }), test: /\.module\.less$/ },
-        less(opts)
-      ]
-    }));
+        less(opts),
+      ],
+    }))
   }
 
   /**
@@ -503,18 +501,18 @@ function createAtoms(options: WebpackAtomsOptions = {}): WebpackAtoms {
           use: [
             loaders.css({ importLoaders: 2, modules }),
             loaders.postcss({ browsers }),
-            loaders.sass(options)
-          ]
-        }
-      )
-    });
+            loaders.sass(options),
+          ],
+        },
+      ),
+    })
 
     rules.sass = makeContextual(({ modules = true, ...opts }: any = {}) => ({
       oneOf: [
         { ...sass({ ...opts, modules }), test: /\.module\.s(a|c)ss$/ },
-        sass(opts)
-      ]
-    }));
+        sass(opts),
+      ],
+    }))
   }
 
   /**
@@ -535,23 +533,23 @@ function createAtoms(options: WebpackAtomsOptions = {}): WebpackAtoms {
           use: [
             loaders.css({ importLoaders: 2, modules }),
             loaders.postcss({ browsers }),
-            loaders.fastSass(options)
-          ]
-        }
-      )
-    });
+            loaders.fastSass(options),
+          ],
+        },
+      ),
+    })
 
     rules.fastSass = makeContextual(
       ({ modules = true, ...opts }: any = {}) => ({
         oneOf: [
           {
             ...fastSass({ ...opts, modules }),
-            test: /\.module\.s(a|c)ss$/
+            test: /\.module\.s(a|c)ss$/,
           },
-          fastSass(opts)
-        ]
-      })
-    );
+          fastSass(opts),
+        ],
+      }),
+    )
   }
 
   /**
@@ -567,8 +565,8 @@ function createAtoms(options: WebpackAtomsOptions = {}): WebpackAtoms {
      */
     define: (defines = {}) =>
       new webpack.DefinePlugin({
-        "process.env.NODE_ENV": JSON.stringify(env),
-        ...defines
+        'process.env.NODE_ENV': JSON.stringify(env),
+        ...defines,
       }),
     /**
      * Minify javascript code without regard for IE8. Attempts
@@ -587,9 +585,9 @@ function createAtoms(options: WebpackAtomsOptions = {}): WebpackAtoms {
         terserOptions: {
           ecma: 8,
           ie8: false,
-          ...terserOptions
+          ...terserOptions,
         },
-        ...options
+        ...options,
       }),
 
     /**
@@ -598,8 +596,8 @@ function createAtoms(options: WebpackAtomsOptions = {}): WebpackAtoms {
      */
     extractCss: options =>
       new MiniCssExtractPlugin({
-        filename: "[name]-[contenthash].css",
-        ...options
+        filename: '[name]-[contenthash].css',
+        ...options,
       }),
 
     minifyCss: (options = {}) => new OptimizeCssAssetsPlugin(options),
@@ -611,16 +609,16 @@ function createAtoms(options: WebpackAtomsOptions = {}): WebpackAtoms {
     html: opts =>
       new HtmlWebpackPlugin({
         inject: true,
-        template: path.join(__dirname, "../assets/index.html"),
-        ...opts
+        template: path.join(__dirname, '../assets/index.html'),
+        ...opts,
       }),
 
     moment: () => new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
 
     copy: (...args) => new CopyWebpackPlugin(...args),
     unusedFiles: (...args) => new UnusedFilesWebpackPlugin(...args),
-    favicons: (...args) => new FaviconsWebpackPlugin(...args)
-  };
+    favicons: (...args) => new FaviconsWebpackPlugin(...args),
+  }
 
   const stats: StatAtoms = {
     none: statsConfig,
@@ -633,9 +631,9 @@ function createAtoms(options: WebpackAtomsOptions = {}): WebpackAtoms {
       colors: true,
       performance: true,
       timings: true,
-      warnings: true
-    }
-  };
+      warnings: true,
+    },
+  }
 
   return {
     loaders,
@@ -645,11 +643,11 @@ function createAtoms(options: WebpackAtomsOptions = {}): WebpackAtoms {
 
     makeExternalOnly,
     makeInternalOnly,
-    makeExtractLoaders
-  };
+    makeExtractLoaders,
+  }
 }
 
 module.exports = {
   ...createAtoms(),
-  createAtoms
-};
+  createAtoms,
+}
