@@ -1,3 +1,14 @@
+## [13.0.1](https://github.com/jquense/webpack-atoms/compare/v13.0.0...v13.0.1) (2020-04-29)
+
+
+### Bug Fixes
+
+* type import ([cb40c86](https://github.com/jquense/webpack-atoms/commit/cb40c86))
+
+
+
+
+
 # [13.0.0](https://github.com/jquense/webpack-atoms/compare/v12.1.0...v13.0.0) (2020-04-29)
 
 
