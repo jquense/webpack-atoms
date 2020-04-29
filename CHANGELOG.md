@@ -1,3 +1,19 @@
+# [13.0.0](https://github.com/jquense/webpack-atoms/compare/v12.1.0...v13.0.0) (2020-04-29)
+
+
+### Features
+
+* bump everything ([6abe0c9](https://github.com/jquense/webpack-atoms/commit/6abe0c9))
+
+
+### BREAKING CHANGES
+
+* bumped everythning
+
+
+
+
+
 # [12.1.0](https://github.com/jquense/webpack-atoms/compare/v12.0.2...v12.1.0) (2020-01-30)
 
 
