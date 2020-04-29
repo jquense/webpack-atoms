@@ -11,6 +11,9 @@ import webpack, { Loader } from 'webpack'
 import UnusedFilesWebpackPlugin from '@4c/unused-files-webpack-plugin'
 import builtinPlugins from './plugins'
 import statsConfig from './stats'
+import { FaviconWebpackPlugionOptions } from 'favicons-webpack-plugin/src/options'
+
+export type { FaviconWebpackPlugionOptions, HtmlWebpackPlugin }
 
 export type Env = 'production' | 'test' | 'development'
 
@@ -253,7 +256,7 @@ function createAtoms(options: WebpackAtomsOptions = {}): WebpackAtoms {
       },
     }),
 
-    astroturf: options => ({
+    astroturf: (options) => ({
       options: { extension: '.module.css', ...options },
       loader: require.resolve('astroturf/loader'),
     }),
@@ -265,7 +268,7 @@ function createAtoms(options: WebpackAtomsOptions = {}): WebpackAtoms {
         loader: require.resolve('postcss-loader'),
         options: {
           ident: `postcss-${++ident}`,
-          plugins: loader => {
+          plugins: (loader) => {
             plugins =
               (typeof plugins === `function` ? plugins(loader) : plugins) || []
 
@@ -403,8 +406,8 @@ function createAtoms(options: WebpackAtomsOptions = {}): WebpackAtoms {
     })
 
     Object.assign(astroturf, {
-      sass: opts => astroturf({ extension: '.module.scss', ...opts }),
-      less: opts => astroturf({ extension: '.module.less', ...opts }),
+      sass: (opts) => astroturf({ extension: '.module.scss', ...opts }),
+      less: (opts) => astroturf({ extension: '.module.less', ...opts }),
     })
 
     rules.astroturf = astroturf as AstroturfRuleFactory
@@ -594,7 +597,7 @@ function createAtoms(options: WebpackAtomsOptions = {}): WebpackAtoms {
      * Extracts css requires into a single file;
      * includes some reasonable defaults
      */
-    extractCss: options =>
+    extractCss: (options) =>
       new MiniCssExtractPlugin({
         filename: '[name]-[contenthash].css',
         ...options,
@@ -606,18 +609,19 @@ function createAtoms(options: WebpackAtomsOptions = {}): WebpackAtoms {
      * Generates an html file that includes the output bundles.
      * Sepecify a `title` option to set the page title.
      */
-    html: opts =>
+    html: (options?: HtmlWebpackPlugin.Options | undefined) =>
       new HtmlWebpackPlugin({
         inject: true,
         template: path.join(__dirname, '../assets/index.html'),
-        ...opts,
+        ...options,
       }),
 
     moment: () => new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
 
     copy: (...args) => new CopyWebpackPlugin(...args),
     unusedFiles: (...args) => new UnusedFilesWebpackPlugin(...args),
-    favicons: (...args) => new FaviconsWebpackPlugin(...args),
+    favicons: (args: string | FaviconWebpackPlugionOptions) =>
+      new FaviconsWebpackPlugin(args),
   }
 
   const stats: StatAtoms = {
