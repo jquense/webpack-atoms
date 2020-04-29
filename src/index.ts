@@ -11,7 +11,7 @@ import webpack, { Loader } from 'webpack'
 import UnusedFilesWebpackPlugin from '@4c/unused-files-webpack-plugin'
 import builtinPlugins from './plugins'
 import statsConfig from './stats'
-import { FaviconWebpackPlugionOptions } from 'favicons-webpack-plugin/src/options'
+import type { FaviconWebpackPlugionOptions } from 'favicons-webpack-plugin/src/options'
 
 export type { FaviconWebpackPlugionOptions, HtmlWebpackPlugin }
 
