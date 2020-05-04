@@ -77,12 +77,12 @@
     "conventionalCommits": true
   },
   "devDependencies": {
-    "@4c/cli": "^2.1.7",
-    "@4c/rollout": "^2.1.6",
+    "@4c/cli": "^2.1.9",
+    "@4c/rollout": "^2.1.8",
     "@4c/tsconfig": "^0.3.1",
     "@babel/cli": "^7.8.4",
-    "@babel/core": "^7.9.0",
-    "@babel/preset-env": "^7.9.5",
+    "@babel/core": "^7.9.6",
+    "@babel/preset-env": "^7.9.6",
     "@babel/preset-flow": "^7.9.0",
     "@babel/preset-typescript": "^7.9.0",
     "@types/mini-css-extract-plugin": "^0.9.1",
