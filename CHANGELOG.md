@@ -1,3 +1,15 @@
+# [13.1.0](https://github.com/jquense/webpack-atoms/compare/v13.0.1...v13.1.0) (2020-05-04)
+
+
+### Features
+
+* remove astroturf dep ([9c64c4a](https://github.com/jquense/webpack-atoms/commit/9c64c4a))
+* remove astroturf dep ([bebddb6](https://github.com/jquense/webpack-atoms/commit/bebddb6))
+
+
+
+
+
 ## [13.0.1](https://github.com/jquense/webpack-atoms/compare/v13.0.0...v13.0.1) (2020-04-29)
 
 
