@@ -38,7 +38,7 @@
   },
   "optionalDependencies": {
     "less": "^3.11.1",
-    "less-loader": "^6.0.0",
+    "less-loader": "^6.1.0",
     "sass-loader": "^8.0.2"
   },
   "dependencies": {
@@ -76,8 +76,8 @@
     "conventionalCommits": true
   },
   "devDependencies": {
-    "@4c/cli": "^2.1.9",
-    "@4c/rollout": "^2.1.8",
+    "@4c/cli": "^2.1.10",
+    "@4c/rollout": "^2.1.9",
     "@4c/tsconfig": "^0.3.1",
     "@babel/cli": "^7.8.4",
     "@babel/core": "^7.9.6",
@@ -86,7 +86,7 @@
     "@babel/preset-typescript": "^7.9.0",
     "@types/mini-css-extract-plugin": "^0.9.1",
     "@types/webpack": "^4.41.12",
-    "@typescript-eslint/eslint-plugin": "^2.30.0",
+    "@typescript-eslint/eslint-plugin": "^2.32.0",
     "babel-eslint": "^10.1.0",
     "eslint": "^6.8.0",
     "eslint-config-4catalyzer-typescript": "^1.1.8",
