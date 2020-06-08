@@ -37,7 +37,7 @@
     "node": ">= 6.9.0 || >= 8.9.0"
   },
   "optionalDependencies": {
-    "less": "^3.11.2",
+    "less": "^3.11.3",
     "less-loader": "^6.1.0",
     "sass-loader": "^8.0.2"
   },
@@ -85,14 +85,14 @@
     "@babel/preset-flow": "^7.10.1",
     "@babel/preset-typescript": "^7.10.1",
     "@types/mini-css-extract-plugin": "^0.9.1",
-    "@types/webpack": "^4.41.16",
+    "@types/webpack": "^4.41.17",
     "@typescript-eslint/eslint-plugin": "^2.34.0",
     "babel-eslint": "^10.1.0",
-    "eslint": "^7.1.0",
+    "eslint": "^7.2.0",
     "eslint-config-4catalyzer-typescript": "^2.0.2",
     "eslint-config-jason": "^7.0.1",
-    "eslint-plugin-import": "^2.20.2",
-    "typescript": "^3.9.3",
+    "eslint-plugin-import": "^2.21.1",
+    "typescript": "^3.9.5",
     "webpack": "^4.43.0"
   }
 }
