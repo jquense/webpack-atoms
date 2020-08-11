@@ -39,7 +39,7 @@
   "optionalDependencies": {
     "less": "^3.12.2",
     "less-loader": "^6.2.0",
-    "sass-loader": "^9.0.2"
+    "sass-loader": "^9.0.3"
   },
   "dependencies": {
     "@4c/fast-sass-loader": "^2.2.0",
@@ -80,13 +80,13 @@
     "@4c/rollout": "^2.1.10",
     "@4c/tsconfig": "^0.3.1",
     "@babel/cli": "^7.10.5",
-    "@babel/core": "^7.11.0",
+    "@babel/core": "^7.11.1",
     "@babel/preset-env": "^7.11.0",
     "@babel/preset-flow": "^7.10.4",
     "@babel/preset-typescript": "^7.10.4",
     "@types/mini-css-extract-plugin": "^0.9.1",
     "@types/webpack": "^4.41.21",
-    "@typescript-eslint/eslint-plugin": "^3.8.0",
+    "@typescript-eslint/eslint-plugin": "^3.9.0",
     "babel-eslint": "^10.1.0",
     "eslint": "^7.6.0",
     "eslint-config-4catalyzer-typescript": "^2.0.2",
