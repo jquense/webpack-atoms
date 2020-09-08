@@ -38,7 +38,7 @@
   },
   "optionalDependencies": {
     "less": "^3.12.2",
-    "less-loader": "^6.2.0",
+    "less-loader": "^7.0.1",
     "sass-loader": "^9.0.3"
   },
   "dependencies": {
