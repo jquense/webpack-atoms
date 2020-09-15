@@ -1,3 +1,27 @@
+# [14.0.0](https://github.com/jquense/webpack-atoms/compare/v13.1.0...v14.0.0) (2020-09-15)
+
+
+### chore
+
+* **deps:** update dependency imports-loader to v1 ([#21](https://github.com/jquense/webpack-atoms/issues/21)) ([45971f3](https://github.com/jquense/webpack-atoms/commit/45971f3))
+
+
+### Features
+
+* bump deps ([a148e9b](https://github.com/jquense/webpack-atoms/commit/a148e9b))
+* **sass-loader:** update dependency sass-loader to v9 ([#23](https://github.com/jquense/webpack-atoms/issues/23)) ([65b67fd](https://github.com/jquense/webpack-atoms/commit/65b67fd))
+* update dependency terser-webpack-plugin to v3 ([#22](https://github.com/jquense/webpack-atoms/issues/22)) ([69a46ad](https://github.com/jquense/webpack-atoms/commit/69a46ad))
+
+
+### BREAKING CHANGES
+
+* **sass-loader:** sass major bump, defaults to dart-sass
+* **deps:** bump imports-loader major bump
+
+
+
+
+
 # [13.1.0](https://github.com/jquense/webpack-atoms/compare/v13.0.1...v13.1.0) (2020-05-04)
 
 
