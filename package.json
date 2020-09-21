@@ -93,7 +93,7 @@
     "eslint-config-4catalyzer-typescript": "^2.0.4",
     "eslint-config-jason": "^7.0.1",
     "eslint-plugin-import": "^2.22.0",
-    "typescript": "^4.0.2",
-    "webpack": "^4.44.1"
+    "typescript": "^4.0.3",
+    "webpack": "^4.44.2"
   }
 }
