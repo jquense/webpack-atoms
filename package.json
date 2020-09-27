@@ -44,7 +44,7 @@
   "dependencies": {
     "@4c/fast-sass-loader": "^2.2.0",
     "@4c/unused-files-webpack-plugin": "^4.0.0",
-    "autoprefixer": "^9.8.6",
+    "autoprefixer": "^10.0.1",
     "babel-loader": "^8.1.0",
     "browserslist": "^4.14.2",
     "chalk": "^4.1.0",
