@@ -48,7 +48,7 @@
     "babel-loader": "^8.1.0",
     "browserslist": "^4.14.2",
     "chalk": "^4.1.0",
-    "copy-webpack-plugin": "5.1.1",
+    "copy-webpack-plugin": "6.2.1",
     "css-loader": "^4.3.0",
     "exports-loader": "^0.7.0",
     "favicons-webpack-plugin": "^4.2.0",
