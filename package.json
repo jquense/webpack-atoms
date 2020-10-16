@@ -94,6 +94,6 @@
     "eslint-config-jason": "^7.0.1",
     "eslint-plugin-import": "^2.22.1",
     "typescript": "^4.0.3",
-    "webpack": "^4.44.2"
+    "webpack": "^5.1.3"
   }
 }
