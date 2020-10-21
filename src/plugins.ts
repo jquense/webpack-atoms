@@ -1,13 +1,16 @@
-import webpack from 'webpack'
+import webpack, { optimize, Compiler } from 'webpack'
 
-type GetConstructorArgs<T> = T extends new (...args: infer U) => any ? U : never
-
-interface WebpackPlugin extends webpack.Plugin {
+interface WebpackPlugin {
   new (...args: any): any
+
+  /**
+   * Apply the plugin
+   */
+  apply(compiler: Compiler): void
 }
 
 interface PluginFactory<P extends new (...args: any) => any> {
-  (...args: GetConstructorArgs<P>): P
+  (...args: ConstructorParameters<P>): P
 }
 
 function plugin<P extends WebpackPlugin>(plugin: P): PluginFactory<P> {
@@ -27,34 +30,22 @@ const plugins = {
   hotModuleReplacement: plugin(webpack.HotModuleReplacementPlugin),
   sourceMapDevTool: plugin(webpack.SourceMapDevToolPlugin),
   evalSourceMapDevTool: plugin(webpack.EvalSourceMapDevToolPlugin),
-  // evalDevToolModule: plugin(webpack.EvalDevToolModulePlugin),
-  // cache: plugin(webpack.CachePlugin),
-  extendedAPI: plugin(webpack.ExtendedAPIPlugin),
-  // externals: plugin('ExternalsPlugin'),
-  // jsonpTemplate: plugin('JsonpTemplatePlugin'),
-  // libraryTemplate: plugin('LibraryTemplatePlugin'),
-  // loaderTarget: plugin('LoaderTargetPlugin'),
-  // memoryOutputFile: plugin('MemoryOutputFileSystem'),
   progress: plugin(webpack.ProgressPlugin),
-  // setVarMainTemplate: plugin(webpack.SetVarMainTemplatePlugin),
-  // umdMainTemplate: plugin(webpack.UmdMainTemplatePlugin),
   noEmitOnErrors: plugin(webpack.NoEmitOnErrorsPlugin),
   environment: plugin(webpack.EnvironmentPlugin),
   dll: plugin(webpack.DllPlugin),
   dllReference: plugin(webpack.DllReferencePlugin),
   loaderOptions: plugin(webpack.LoaderOptionsPlugin),
-  namedModules: plugin(webpack.NamedModulesPlugin),
-  namedChunks: plugin(webpack.NamedChunksPlugin),
-  hashedModuleIds: plugin(webpack.HashedModuleIdsPlugin),
-  // moduleFilenameH: plugin('ModuleFilenameHelpers'),
 
-  aggressiveMerging: plugin(webpack.optimize.AggressiveMergingPlugin),
-  aggressiveSplitting: plugin(webpack.optimize.AggressiveSplittingPlugin),
-  // chunkModuleIdRange: plugin(webpack.optimize.ChunkModuleIdRangePlugin),
-  limitChunkCount: plugin(webpack.optimize.LimitChunkCountPlugin),
-  minChunkSize: plugin(webpack.optimize.MinChunkSizePlugin),
-  occurrenceOrder: plugin(webpack.optimize.OccurrenceOrderPlugin),
-  moduleConcatenation: plugin(webpack.optimize.ModuleConcatenationPlugin),
+  aggressiveMerging: plugin(webpack.optimize.AggressiveMergingPlugin as any),
+  aggressiveSplitting: plugin(
+    webpack.optimize.AggressiveSplittingPlugin as any,
+  ),
+  limitChunkCount: plugin(webpack.optimize.LimitChunkCountPlugin as any),
+  minChunkSize: plugin(webpack.optimize.MinChunkSizePlugin as any),
+  moduleConcatenation: plugin(
+    webpack.optimize.ModuleConcatenationPlugin as any,
+  ),
 }
 
 export default plugins

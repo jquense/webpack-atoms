@@ -7,19 +7,19 @@ import HtmlWebpackPlugin from 'html-webpack-plugin'
 import MiniCssExtractPlugin from 'mini-css-extract-plugin'
 import OptimizeCssAssetsPlugin from 'optimize-css-assets-webpack-plugin'
 import TerserPlugin from 'terser-webpack-plugin'
-import webpack, { Loader } from 'webpack'
+import webpack, { RuleSetRule, RuleSetUseItem, Configuration } from 'webpack'
 import UnusedFilesWebpackPlugin from '@4c/unused-files-webpack-plugin'
 import builtinPlugins from './plugins'
-import statsConfig from './stats'
+import statsConfig, { StatsOptions } from './stats'
 import type { FaviconWebpackPlugionOptions } from 'favicons-webpack-plugin/src/options'
 
 export type { FaviconWebpackPlugionOptions, HtmlWebpackPlugin }
 
 export type Env = 'production' | 'test' | 'development'
 
-export type LoaderResolver<T extends {}> = (options?: T) => webpack.Loader
+export type LoaderResolver<T extends {}> = (options?: T) => RuleSetUseItem
 
-type Rule = webpack.RuleSetRule
+type Rule = RuleSetRule
 
 export type RuleFactory<T extends {} = {}> = (options?: T) => Rule
 
@@ -47,8 +47,8 @@ type PluginFactory = (...args: any) => PluginInstance
 type BuiltinPlugins = typeof builtinPlugins
 
 type StatAtoms = {
-  none: webpack.Options.Stats
-  minimal: webpack.Options.Stats
+  none: StatsOptions
+  minimal: StatsOptions
 }
 
 export type WebpackAtomsOptions = {
@@ -72,7 +72,7 @@ export type LoaderAtoms = {
   miniCssExtract: LoaderResolver<
     {
       disable?: boolean
-      fallback?: Loader
+      fallback?: RuleSetUseItem
     } & MiniCssExtractPlugin.PluginOptions
   >
   astroturf: LoaderResolver<any>
@@ -139,8 +139,8 @@ export type WebpackAtoms = {
   makeInternalOnly: (original: RuleFactory<any>) => RuleFactory<any>
   makeExtractLoaders: (
     options: { extract?: boolean },
-    config: { fallback: Loader; use: Loader[] },
-  ) => Loader[]
+    config: { fallback: RuleSetUseItem; use: RuleSetUseItem[] },
+  ) => RuleSetUseItem[]
 }
 
 let VENDOR_MODULE_REGEX = /node_modules/
@@ -190,8 +190,8 @@ function createAtoms(options: WebpackAtomsOptions = {}): WebpackAtoms {
 
   const makeExtractLoaders = (
     { extract }: { extract?: boolean } = {},
-    config: { fallback: Loader; use: Loader[] },
-  ): Loader[] => [
+    config: { fallback: RuleSetUseItem; use: RuleSetUseItem[] },
+  ): RuleSetUseItem[] => [
     // eslint-disable-next-line @typescript-eslint/no-use-before-define
     loaders.miniCssExtract({
       fallback: config.fallback,
@@ -581,10 +581,8 @@ function createAtoms(options: WebpackAtomsOptions = {}): WebpackAtoms {
      */
     minifyJs: ({ terserOptions, ...options }: any = {}) =>
       new TerserPlugin({
-        cache: true,
         parallel: true,
         exclude: /\.min\.js/,
-        sourceMap: true,
         terserOptions: {
           ecma: 8,
           ie8: false,
@@ -616,7 +614,11 @@ function createAtoms(options: WebpackAtomsOptions = {}): WebpackAtoms {
         ...options,
       }),
 
-    moment: () => new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
+    moment: () =>
+      new webpack.IgnorePlugin({
+        contextRegExp: /^\.\/locale$/,
+        resourceRegExp: /moment$/,
+      }),
 
     copy: (...args) => new CopyWebpackPlugin(...args),
     unusedFiles: (...args) => new UnusedFilesWebpackPlugin(...args),
