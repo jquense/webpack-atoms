@@ -1,3 +1,19 @@
+# [15.0.0](https://github.com/jquense/webpack-atoms/compare/v14.0.0...v15.0.0) (2020-10-22)
+
+
+### Features
+
+* upgrade to webpack4 ([fca4186](https://github.com/jquense/webpack-atoms/commit/fca4186))
+
+
+### BREAKING CHANGES
+
+* lots of plugin updates
+
+
+
+
+
 # [14.0.0](https://github.com/jquense/webpack-atoms/compare/v13.1.0...v14.0.0) (2020-09-15)
 
 
