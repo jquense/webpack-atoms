@@ -268,7 +268,6 @@ function createAtoms(options: WebpackAtomsOptions = {}): WebpackAtoms {
       return {
         loader,
         options: {
-          ident: `postcss-${++ident}`,
           postcssOptions: {
             plugins: [
               ...(typeof plugins === `function` ? plugins(loader) : plugins) || [],
