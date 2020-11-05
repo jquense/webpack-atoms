@@ -1,3 +1,14 @@
+## [15.0.1](https://github.com/jquense/webpack-atoms/compare/v15.0.0...v15.0.1) (2020-11-05)
+
+
+### Bug Fixes
+
+*  PostCSS loader ([#53](https://github.com/jquense/webpack-atoms/issues/53)) ([15e08a4](https://github.com/jquense/webpack-atoms/commit/15e08a4))
+
+
+
+
+
 # [15.0.0](https://github.com/jquense/webpack-atoms/compare/v14.0.0...v15.0.0) (2020-10-22)
 
 
