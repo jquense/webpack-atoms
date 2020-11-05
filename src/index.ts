@@ -78,7 +78,9 @@ export type LoaderAtoms = {
   astroturf: LoaderResolver<any>
   postcss: LoaderResolver<{
     browsers?: string[]
-    plugins?: any[] | ((loader: any) => any[])
+    postcssOptions?:
+      | Record<string, any>
+      | ((...args: any[]) => Record<string, any>)
   }>
   less: LoaderResolver<any>
   sass: LoaderResolver<any>
@@ -262,25 +264,35 @@ function createAtoms(options: WebpackAtomsOptions = {}): WebpackAtoms {
     }),
 
     postcss: (options = {}) => {
-      let { plugins, browsers = supportedBrowsers, ...postcssOpts } = options
+      let { postcssOptions, browsers = supportedBrowsers, ...rest } = options
       const loader = require.resolve('postcss-loader')
 
       return {
         loader,
         options: {
-          postcssOptions: {
-            plugins: [
-              ...(typeof plugins === `function` ? plugins(loader) : plugins) || [],
-              // overrideBrowserslist is only set when browsers is explicit
-              autoprefixer({
-                overrideBrowserslist: browsers,
-                flexbox: `no-2009`,
-              }),
-            ],
-            ...postcssOpts,
+          ...rest,
+          postcssOptions: (...args) => {
+            const postcssOpts =
+              typeof postcssOptions === `function`
+                ? postcssOptions(...args)
+                : postcssOptions
+
+            const plugins = postcssOpts?.plugins ?? []
+
+            return {
+              ...postcssOpts,
+              plugins: [
+                ...plugins,
+                // overrideBrowserslist is only set when browsers is explicit
+                autoprefixer({
+                  overrideBrowserslist: browsers,
+                  flexbox: `no-2009`,
+                }),
+              ],
+            }
           },
         },
-      };
+      }
     },
 
     less: (options = {}) => ({
