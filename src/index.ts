@@ -1,3 +1,6 @@
+/* eslint-disable prefer-const */
+/* eslint-disable @typescript-eslint/no-shadow */
+/* eslint-disable @typescript-eslint/ban-types */
 import path from 'path'
 import autoprefixer from 'autoprefixer'
 import { loadConfig } from 'browserslist'
@@ -7,7 +10,7 @@ import HtmlWebpackPlugin from 'html-webpack-plugin'
 import MiniCssExtractPlugin from 'mini-css-extract-plugin'
 import OptimizeCssAssetsPlugin from 'optimize-css-assets-webpack-plugin'
 import TerserPlugin from 'terser-webpack-plugin'
-import webpack, { RuleSetRule, RuleSetUseItem, Configuration } from 'webpack'
+import webpack, { RuleSetRule, RuleSetUseItem } from 'webpack'
 import UnusedFilesWebpackPlugin from '@4c/unused-files-webpack-plugin'
 import builtinPlugins from './plugins'
 import statsConfig, { StatsOptions } from './stats'
@@ -84,7 +87,6 @@ export type LoaderAtoms = {
   }>
   less: LoaderResolver<any>
   sass: LoaderResolver<any>
-  fastSass: LoaderResolver<any>
 
   file: LoaderResolver<any>
   url: LoaderResolver<any>
@@ -110,7 +112,6 @@ export type RuleAtoms = {
   postcss: ContextualRuleFactory
   less: ContextualRuleFactory
   sass: ContextualRuleFactory
-  fastSass: ContextualRuleFactory
 
   astroturf: AstroturfRuleFactory
 }
@@ -145,8 +146,8 @@ export type WebpackAtoms = {
   ) => RuleSetUseItem[]
 }
 
-let VENDOR_MODULE_REGEX = /node_modules/
-let DEFAULT_BROWSERS = ['> 1%', 'Firefox ESR', 'not ie < 9']
+const VENDOR_MODULE_REGEX = /node_modules/
+const DEFAULT_BROWSERS = ['> 1%', 'Firefox ESR', 'not ie < 9']
 
 function createAtoms(options: WebpackAtomsOptions = {}): WebpackAtoms {
   let {
@@ -168,7 +169,7 @@ function createAtoms(options: WebpackAtomsOptions = {}): WebpackAtoms {
   const makeExternalOnly = (original: RuleFactory<any>) => (
     options = {},
   ): Rule => {
-    let rule = original(options)
+    const rule = original(options)
     rule.include = vendorRegex
     return rule
   }
@@ -176,7 +177,7 @@ function createAtoms(options: WebpackAtomsOptions = {}): WebpackAtoms {
   const makeInternalOnly = (original: RuleFactory<any>) => (
     options = {},
   ): Rule => {
-    let rule = original(options)
+    const rule = original(options)
     rule.exclude = vendorRegex
     return rule
   }
@@ -203,8 +204,6 @@ function createAtoms(options: WebpackAtomsOptions = {}): WebpackAtoms {
   ]
 
   const PRODUCTION = env === 'production'
-
-  let ident = 0
 
   /**
    * Loaders
@@ -264,7 +263,7 @@ function createAtoms(options: WebpackAtomsOptions = {}): WebpackAtoms {
     }),
 
     postcss: (options = {}) => {
-      let { postcssOptions, browsers = supportedBrowsers, ...rest } = options
+      const { postcssOptions, browsers = supportedBrowsers, ...rest } = options
       const loader = require.resolve('postcss-loader')
 
       return {
@@ -303,11 +302,6 @@ function createAtoms(options: WebpackAtomsOptions = {}): WebpackAtoms {
     sass: (options = {}) => ({
       options,
       loader: require.resolve('sass-loader'),
-    }),
-
-    fastSass: (options = {}) => ({
-      options,
-      loader: require.resolve('@4c/fast-sass-loader'),
     }),
 
     file: (options = {}) => ({
@@ -352,8 +346,8 @@ function createAtoms(options: WebpackAtomsOptions = {}): WebpackAtoms {
    * Javascript loader via babel, excludes node_modules
    */
   {
-    let js = (options = {}) => ({
-      test: /\.jsx?$/,
+    const js = (options = {}) => ({
+      test: /\.(j|t)sx?$/,
       exclude: vendorRegex,
       use: [loaders.js(options)],
     })
@@ -409,7 +403,7 @@ function createAtoms(options: WebpackAtomsOptions = {}): WebpackAtoms {
    * Astroturf loader.
    */
   {
-    let astroturf = (options = {}) => ({
+    const astroturf = (options = {}) => ({
       test: /\.(j|t)sx?$/,
       use: [loaders.astroturf(options)],
     })
@@ -528,43 +522,6 @@ function createAtoms(options: WebpackAtomsOptions = {}): WebpackAtoms {
   }
 
   /**
-   * fast SASS style loader, excludes node_modules.
-   */
-  {
-    const fastSass = ({
-      browsers,
-      modules,
-      extract,
-      ...options
-    }: any = {}) => ({
-      test: /\.s(a|c)ss$/,
-      use: makeExtractLoaders(
-        { extract },
-        {
-          fallback: loaders.style(),
-          use: [
-            loaders.css({ importLoaders: 2, modules }),
-            loaders.postcss({ browsers }),
-            loaders.fastSass(options),
-          ],
-        },
-      ),
-    })
-
-    rules.fastSass = makeContextual(
-      ({ modules = true, ...opts }: any = {}) => ({
-        oneOf: [
-          {
-            ...fastSass({ ...opts, modules }),
-            test: /\.module\.s(a|c)ss$/,
-          },
-          fastSass(opts),
-        ],
-      }),
-    )
-  }
-
-  /**
    * Plugins
    */
   const plugins: PluginAtoms = {
@@ -577,6 +534,7 @@ function createAtoms(options: WebpackAtomsOptions = {}): WebpackAtoms {
      */
     define: (defines = {}) =>
       new webpack.DefinePlugin({
+        // eslint-disable-next-line @typescript-eslint/naming-convention
         'process.env.NODE_ENV': JSON.stringify(env),
         ...defines,
       }),
@@ -662,7 +620,23 @@ function createAtoms(options: WebpackAtomsOptions = {}): WebpackAtoms {
   }
 }
 
-module.exports = {
-  ...createAtoms(),
+const {
+  makeExternalOnly,
+  makeInternalOnly,
+  makeExtractLoaders,
+  stats,
+  loaders,
+  rules,
+  plugins,
+} = createAtoms()
+
+export {
+  makeExternalOnly,
+  makeInternalOnly,
+  makeExtractLoaders,
+  loaders,
+  rules,
+  plugins,
+  stats,
   createAtoms,
 }

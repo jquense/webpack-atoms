@@ -38,9 +38,9 @@ const plugins = {
   loaderOptions: plugin(webpack.LoaderOptionsPlugin),
 
   aggressiveMerging: plugin(webpack.optimize.AggressiveMergingPlugin as any),
-  aggressiveSplitting: plugin(
-    webpack.optimize.AggressiveSplittingPlugin as any,
-  ),
+  // aggressiveSplitting: plugin(
+  //   webpack.optimize.AggressiveSplittingPlugin as any,
+  // ),
   limitChunkCount: plugin(webpack.optimize.LimitChunkCountPlugin as any),
   minChunkSize: plugin(webpack.optimize.MinChunkSizePlugin as any),
   moduleConcatenation: plugin(
