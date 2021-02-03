@@ -1,3 +1,19 @@
+# [16.0.0](https://github.com/jquense/webpack-atoms/compare/v15.0.1...v16.0.0) (2021-02-03)
+
+
+### Features
+
+* bump deps, remove fastSass, support ts with js rule ([2cff22c](https://github.com/jquense/webpack-atoms/commit/2cff22c))
+
+
+### BREAKING CHANGES
+
+* remove fastSass, and add ts file sto js rule
+
+
+
+
+
 ## [15.0.1](https://github.com/jquense/webpack-atoms/compare/v15.0.0...v15.0.1) (2020-11-05)
 
 
