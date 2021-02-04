@@ -18,7 +18,7 @@ import type { FaviconWebpackPlugionOptions } from 'favicons-webpack-plugin/src/o
 
 export type { FaviconWebpackPlugionOptions, HtmlWebpackPlugin }
 
-export type Env = 'production' | 'test' | 'development'
+export type Env = string
 
 export type LoaderResolver<T extends {}> = (options?: T) => RuleSetUseItem
 
