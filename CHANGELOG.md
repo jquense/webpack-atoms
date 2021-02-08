@@ -1,3 +1,14 @@
+## [16.0.1](https://github.com/jquense/webpack-atoms/compare/v16.0.0...v16.0.1) (2021-02-08)
+
+
+### Bug Fixes
+
+* swap out minimizer plugin for supported one ([ed5c6f5](https://github.com/jquense/webpack-atoms/commit/ed5c6f5))
+
+
+
+
+
 # [16.0.0](https://github.com/jquense/webpack-atoms/compare/v15.0.1...v16.0.0) (2021-02-03)
 
 
