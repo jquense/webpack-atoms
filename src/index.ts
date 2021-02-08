@@ -8,7 +8,7 @@ import CopyWebpackPlugin from 'copy-webpack-plugin'
 import FaviconsWebpackPlugin from 'favicons-webpack-plugin'
 import HtmlWebpackPlugin from 'html-webpack-plugin'
 import MiniCssExtractPlugin from 'mini-css-extract-plugin'
-import OptimizeCssAssetsPlugin from 'optimize-css-assets-webpack-plugin'
+import CssMinimizerPlugin from 'css-minimizer-webpack-plugin'
 import TerserPlugin from 'terser-webpack-plugin'
 import webpack, { RuleSetRule, RuleSetUseItem } from 'webpack'
 import UnusedFilesWebpackPlugin from '@4c/unused-files-webpack-plugin'
@@ -568,7 +568,7 @@ function createAtoms(options: WebpackAtomsOptions = {}): WebpackAtoms {
         ...options,
       }),
 
-    minifyCss: (options = {}) => new OptimizeCssAssetsPlugin(options),
+    minifyCss: (options = {}) => new CssMinimizerPlugin(options),
 
     /**
      * Generates an html file that includes the output bundles.
