@@ -37,6 +37,7 @@ export interface AstroTurfOptions {
   extension?: string
   tagName?: string
   styleTag?: string
+  useAltLoader?: boolean
 }
 
 export type AstroturfRuleFactory = RuleFactory<AstroTurfOptions> & {
@@ -45,7 +46,7 @@ export type AstroturfRuleFactory = RuleFactory<AstroTurfOptions> & {
 }
 
 type PluginInstance = any
-type PluginFactory = (...args: any) => PluginInstance
+export type PluginFactory = (...args: any) => PluginInstance
 
 type BuiltinPlugins = typeof builtinPlugins
 
