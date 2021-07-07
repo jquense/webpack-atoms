@@ -46,7 +46,7 @@ export type AstroturfRuleFactory = RuleFactory<AstroTurfOptions> & {
 }
 
 type PluginInstance = any
-export type PluginFactory = (...args: any) => PluginInstance
+type PluginFactory = (...args: any) => PluginInstance
 
 type BuiltinPlugins = typeof builtinPlugins
 
