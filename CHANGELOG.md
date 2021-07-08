@@ -1,3 +1,14 @@
+# [16.1.0](https://github.com/jquense/webpack-atoms/compare/v16.0.1...v16.1.0) (2021-07-08)
+
+
+### Features
+
+* add useAltLoader to AstroturfOptions ([#62](https://github.com/jquense/webpack-atoms/issues/62)) ([b74dff0](https://github.com/jquense/webpack-atoms/commit/b74dff0))
+
+
+
+
+
 ## [16.0.1](https://github.com/jquense/webpack-atoms/compare/v16.0.0...v16.0.1) (2021-02-08)
 
 
