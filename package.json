@@ -40,7 +40,7 @@
     "favicons": "^6.2.0",
     "fibers": "^5.0.0",
     "less": "^4.1.1",
-    "less-loader": "^8.0.0"
+    "less-loader": "^10.0.1"
   },
   "dependencies": {
     "@4c/unused-files-webpack-plugin": "^4.0.0",
