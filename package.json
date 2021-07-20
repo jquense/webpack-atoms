@@ -67,7 +67,7 @@
     "raw-loader": "^4.0.2",
     "sass-loader": "^10.1.1",
     "semver": "^7.3.4",
-    "style-loader": "^2.0.0",
+    "style-loader": "^3.2.1",
     "terser-webpack-plugin": "^5.1.1",
     "url-loader": "^4.1.1",
     "yaml-loader": "^0.6.0"
