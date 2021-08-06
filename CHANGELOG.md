@@ -1,3 +1,14 @@
+## [17.0.1](https://github.com/jquense/webpack-atoms/compare/v17.0.0...v17.0.1) (2021-08-06)
+
+
+### Bug Fixes
+
+* forgot these deps ([acbc5fb](https://github.com/jquense/webpack-atoms/commit/acbc5fb17c0c42857165f04e29ff411f535e7912))
+
+
+
+
+
 # [17.0.0](https://github.com/jquense/webpack-atoms/compare/v16.1.0...v17.0.0) (2021-08-06)
 
 
