@@ -65,7 +65,7 @@
     "null-loader": "^4.0.1",
     "postcss-loader": "^6.1.1",
     "raw-loader": "^4.0.2",
-    "sass-loader": "^10.1.1",
+    "sass-loader": "^12.1.0",
     "semver": "^7.3.5",
     "style-loader": "^3.2.1",
     "terser-webpack-plugin": "^5.1.4",
