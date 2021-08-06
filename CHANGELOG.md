@@ -1,3 +1,19 @@
+# [17.0.0](https://github.com/jquense/webpack-atoms/compare/v16.1.0...v17.0.0) (2021-08-06)
+
+
+### chore
+
+* bump dependencies ([f350d3c](https://github.com/jquense/webpack-atoms/commit/f350d3cc20a95720f5b5d88da3ff4246565b1505))
+
+
+### BREAKING CHANGES
+
+* bump a bunch of major loader versions, mostly around node and webpack min versions
+
+
+
+
+
 # [16.1.0](https://github.com/jquense/webpack-atoms/compare/v16.0.1...v16.1.0) (2021-07-08)
 
 
