@@ -50,7 +50,7 @@
     "babel-loader": "^8.2.2",
     "browserslist": "^4.16.7",
     "chalk": "^4.1.2",
-    "copy-webpack-plugin": "6.2.1",
+    "copy-webpack-plugin": "9.0.1",
     "css-loader": "^6.2.0",
     "css-minimizer-webpack-plugin": "^3.0.2",
     "exports-loader": "^3.0.0",
