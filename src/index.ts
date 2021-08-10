@@ -264,35 +264,25 @@ function createAtoms(options: WebpackAtomsOptions = {}): WebpackAtoms {
     }),
 
     postcss: (options = {}) => {
-      const { postcssOptions, browsers = supportedBrowsers, ...rest } = options
+      let { plugins, browsers = supportedBrowsers, ...postcssOpts } = options
       const loader = require.resolve('postcss-loader')
 
       return {
         loader,
         options: {
-          ...rest,
-          postcssOptions: (...args) => {
-            const postcssOpts =
-              typeof postcssOptions === `function`
-                ? postcssOptions(...args)
-                : postcssOptions
-
-            const plugins = postcssOpts?.plugins ?? []
-
-            return {
-              ...postcssOpts,
-              plugins: [
-                ...plugins,
-                // overrideBrowserslist is only set when browsers is explicit
-                autoprefixer({
-                  overrideBrowserslist: browsers,
-                  flexbox: `no-2009`,
-                }),
-              ],
-            }
+          postcssOptions: {
+            plugins: [
+              ...(typeof plugins === `function` ? plugins(loader) : plugins) || [],
+              // overrideBrowserslist is only set when browsers is explicit
+              autoprefixer({
+                overrideBrowserslist: browsers,
+                flexbox: `no-2009`,
+              }),
+            ],
+            ...postcssOpts,
           },
         },
-      }
+      };
     },
 
     less: (options = {}) => ({
