@@ -291,6 +291,7 @@ function createAtoms(options: WebpackAtomsOptions = {}): WebpackAtoms {
               ],
             }
           },
+        },
       }
     },
 
