@@ -1,3 +1,15 @@
+# [17.1.0](https://github.com/jquense/webpack-atoms/compare/v17.0.1...v17.1.0) (2021-08-10)
+
+
+### Features
+
+* add enableCssProp to typescript ([#69](https://github.com/jquense/webpack-atoms/issues/69)) ([50119cb](https://github.com/jquense/webpack-atoms/commit/50119cbb72c1dce6979738287997b4efebc31b53))
+* webpack 5 asset modules ([#74](https://github.com/jquense/webpack-atoms/issues/74)) ([a231483](https://github.com/jquense/webpack-atoms/commit/a231483e804265c9642381b6623666d5a1ccbc92))
+
+
+
+
+
 ## [17.0.1](https://github.com/jquense/webpack-atoms/compare/v17.0.0...v17.0.1) (2021-08-06)
 
 
