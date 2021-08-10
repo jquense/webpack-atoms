@@ -365,8 +365,16 @@ function createAtoms(options: WebpackAtomsOptions = {}): WebpackAtoms {
    * Font loader
    */
   rules.fonts = () => ({
-    use: [loaders.url()],
+    type: 'asset',
     test: /\.(eot|otf|ttf|woff(2)?)(\?.*)?$/,
+    parser: {
+      dataUrlCondition: {
+        maxSize: 10000,
+      }
+    },
+    generator: {
+      filename: `${assetRelativeRoot}[name]-[hash].[ext]`,
+    },
   })
 
   /**
@@ -374,16 +382,27 @@ function createAtoms(options: WebpackAtomsOptions = {}): WebpackAtoms {
    * the size threshold
    */
   rules.images = () => ({
-    use: [loaders.url()],
+    type: 'asset',
     test: /\.(ico|svg|jpg|jpeg|png|gif|webp)(\?.*)?$/,
+    parser: {
+      dataUrlCondition: {
+        maxSize: 10000,
+      }
+    },
+    generator: {
+      filename: `${assetRelativeRoot}[name]-[hash].[ext]`,
+    },
   })
 
   /**
    * Loads audio or video assets
    */
   rules.audioVideo = () => ({
-    use: [loaders.file()],
+    type: 'asset/resource',
     test: /\.(mp4|webm|wav|mp3|m4a|aac|oga|flac)$/,
+    generator: {
+      filename: `${assetRelativeRoot}[name]-[hash].[ext]`,
+    },
   })
 
   /**
@@ -397,7 +416,10 @@ function createAtoms(options: WebpackAtomsOptions = {}): WebpackAtoms {
     // Also exclude `html` and `json` extensions so they get processed
     // by webpacks internal loaders.
     exclude: [/\.jsx?$/, /\.html$/, /\.json$/],
-    use: [loaders.file()],
+    type: 'asset/resource',
+    generator: {
+      filename: `${assetRelativeRoot}[name]-[hash].[ext]`,
+    },
   })
 
   /**
