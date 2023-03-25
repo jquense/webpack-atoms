@@ -89,7 +89,7 @@
     "@babel/preset-typescript": "^7.15.0",
     "@types/mini-css-extract-plugin": "^2.2.0",
     "@typescript-eslint/eslint-plugin": "^4.29.1",
-    "babel-eslint": "^10.1.0",
+    "@babel/eslint-parser": "^7.11.0",
     "eslint": "^7.32.0",
     "eslint-config-4catalyzer-typescript": "^3.1.0",
     "eslint-config-jason": "^8.1.1",
